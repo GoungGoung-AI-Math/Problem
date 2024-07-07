@@ -32,7 +32,7 @@ ssh -t -i $PEM_PATH $EC2_USER@$EC2_IP << EOF
   echo "Database credentials - Username: \$DB_USERNAME, Password: \$DB_PASSWORD"
 
   # Modify docker-compose.yml directly to set environment variables
-  sed -i "s/SPRING_DATASOURCE_USERNAME: springuser/SPRING_DATASOURCE_USERNAME: \$DB_USERNAME/" $REMOTE_PATH/docker-compose.yml
+  sed -i "s/SPRING_DATASOURCE_USERNAME: springproblem/SPRING_DATASOURCE_USERNAME: \$DB_USERNAME/" $REMOTE_PATH/docker-compose.yml
   sed -i "s/SPRING_DATASOURCE_PASSWORD: password/SPRING_DATASOURCE_PASSWORD: \$DB_PASSWORD/" $REMOTE_PATH/docker-compose.yml
 
   # Log the changes for verification
