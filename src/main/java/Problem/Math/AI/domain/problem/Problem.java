@@ -1,13 +1,12 @@
-package Problem.Math.AI.entity.problem;
+package Problem.Math.AI.domain.problem;
 
-import Problem.Math.AI.entity.BaseEntity;
+import Problem.Math.AI.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 

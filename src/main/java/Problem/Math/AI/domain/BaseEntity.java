@@ -1,4 +1,4 @@
-package Problem.Math.AI.entity;
+package Problem.Math.AI.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

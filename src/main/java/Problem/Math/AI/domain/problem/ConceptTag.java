@@ -1,6 +1,6 @@
-package Problem.Math.AI.entity.attempt;
+package Problem.Math.AI.domain.problem;
 
-import Problem.Math.AI.entity.Content;
+
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -9,12 +9,14 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Builder
-@Table(name = "attempt_content")
+@Table(name = "concep_tag")
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class AttemptContent extends Content {
+public class ConceptTag {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "problem_attempt")
-    private ProblemAttempt problemAttempt;
+    @Column(name = "tag_name")
+    private String tageName;
 }

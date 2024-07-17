@@ -1,6 +1,6 @@
-package Problem.Math.AI.entity.problem;
+package Problem.Math.AI.domain.problem;
 
-
+import Problem.Math.AI.domain.Content;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -9,14 +9,12 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Builder
-@Table(name = "concep_tag")
+@Table(name = "solution_content")
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ConceptTag {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class SolutionContent extends Content {
 
-    @Column(name = "tag_name")
-    private String tageName;
+    @ManyToOne
+    @JoinColumn(name = "official_solution_id")
+    private OfficialSolution officialSolution;
 }

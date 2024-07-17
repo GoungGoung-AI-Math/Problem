@@ -1,7 +1,6 @@
-package Problem.Math.AI.entity.question;
+package Problem.Math.AI.domain.question;
 
-import Problem.Math.AI.entity.Content;
-import Problem.Math.AI.entity.problem.OfficialSolution;
+import Problem.Math.AI.domain.Content;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;

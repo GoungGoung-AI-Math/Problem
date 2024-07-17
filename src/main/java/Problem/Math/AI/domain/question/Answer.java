@@ -1,7 +1,7 @@
-package Problem.Math.AI.entity.question;
+package Problem.Math.AI.domain.question;
 
-import Problem.Math.AI.entity.BaseEntity;
-import Problem.Math.AI.entity.problem.Problem;
+import Problem.Math.AI.domain.BaseEntity;
+import Problem.Math.AI.domain.problem.Problem;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -14,11 +14,14 @@ import lombok.NoArgsConstructor;
 @Table(name = "problem_attempt")
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Question extends BaseEntity {
+public class Answer extends BaseEntity {
+    @Column
+    private String title;
+
     @Column
     private String content;
 
     @ManyToOne
-    @JoinColumn(name = "problem_id", nullable = false)
-    private Problem problem;
+    @JoinColumn(name = "question_id", nullable = false)
+    private Question question;
 }
