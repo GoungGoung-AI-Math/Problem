@@ -1,4 +1,4 @@
-package Problem.Math.AI.dto;
+package Problem.Math.AI.domain.problem.dto;
 
 import jakarta.persistence.Column;
 

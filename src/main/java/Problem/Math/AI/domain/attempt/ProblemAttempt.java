@@ -1,7 +1,7 @@
 package Problem.Math.AI.domain.attempt;
 
 import Problem.Math.AI.domain.BaseEntity;
-import Problem.Math.AI.domain.problem.Problem;
+import Problem.Math.AI.domain.problem.entity.Problem;
 import jakarta.persistence.*;
 import lombok.*;
 

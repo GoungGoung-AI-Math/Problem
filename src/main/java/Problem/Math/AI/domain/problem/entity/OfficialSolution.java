@@ -1,4 +1,4 @@
-package Problem.Math.AI.domain.problem;
+package Problem.Math.AI.domain.problem.entity;
 
 import Problem.Math.AI.domain.BaseEntity;
 import jakarta.persistence.*;

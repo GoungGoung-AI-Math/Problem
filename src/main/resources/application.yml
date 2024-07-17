@@ -1,0 +1,7 @@
+aws:
+  s3:
+    bucket-name: openai-test-bucket-solsol
+    s3-region: ap-northeast-2
+    url-expires-time: 10
+
+

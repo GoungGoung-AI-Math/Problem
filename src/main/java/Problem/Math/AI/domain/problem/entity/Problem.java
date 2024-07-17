@@ -1,4 +1,4 @@
-package Problem.Math.AI.domain.problem;
+package Problem.Math.AI.domain.problem.entity;
 
 import Problem.Math.AI.domain.BaseEntity;
 import jakarta.persistence.*;
@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
