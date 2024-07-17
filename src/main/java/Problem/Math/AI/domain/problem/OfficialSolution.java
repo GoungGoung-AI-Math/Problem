@@ -13,7 +13,7 @@ import java.util.Set;
 @Entity
 @Builder
 @Table(name = "official_solution")
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OfficialSolution extends BaseEntity {
 
@@ -28,6 +28,6 @@ public class OfficialSolution extends BaseEntity {
 
     @OneToMany
     @JoinColumn(name = "official_solution_id")
-    private Set<SolutionContent> solutionContents = new HashSet<>();
+    private Set<SolutionContent> solutionContents;
 
 }

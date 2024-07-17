@@ -14,7 +14,6 @@ services:
       - "5433:5432"
 
   springboot_problem:
-    build: .
     container_name: springboot_problem
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql_problem:5432/springdb_problem

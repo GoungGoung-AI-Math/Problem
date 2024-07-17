@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Builder
 @Table(name = "problem_attempt")
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Answer extends BaseEntity {
     @Column

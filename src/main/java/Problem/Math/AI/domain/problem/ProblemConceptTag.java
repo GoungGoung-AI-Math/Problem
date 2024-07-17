@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Builder
 @Table(name = "problem_concep_tag")
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProblemConceptTag {
     @Id

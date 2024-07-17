@@ -14,7 +14,7 @@ google_client_id=$(echo $secrets | jq -r '.data.data.google_client_id')
 google_client_secret=$(echo $secrets | jq -r '.data.data.google_client_secret')
 
 # application.yml 파일에 설정 추가
-application_yml_path="/Users/makisekurisu/Desktop/User.AI/src/main/resources/application.yml"  # 실제 프로젝트 경로로 변경하세요
+application_yml_path="./src/main/resources/application-prod.yml"  # 실제 프로젝트 경로로 변경하세요
 
 echo "Updating application.yml..."
 

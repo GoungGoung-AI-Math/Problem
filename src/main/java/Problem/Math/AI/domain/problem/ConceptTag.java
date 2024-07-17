@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Builder
 @Table(name = "concep_tag")
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ConceptTag {
     @Id

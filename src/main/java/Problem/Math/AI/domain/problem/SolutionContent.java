@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Builder
 @Table(name = "solution_content")
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SolutionContent extends Content {
 

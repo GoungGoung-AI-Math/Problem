@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Builder
 @Table(name = "answer_content")
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AnswerContent extends Content {
     @ManyToOne

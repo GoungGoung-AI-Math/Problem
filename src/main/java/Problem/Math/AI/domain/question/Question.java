@@ -12,7 +12,7 @@ import java.util.Set;
 @Entity
 @Builder
 @Table(name = "problem_attempt")
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Question extends BaseEntity {
 
@@ -31,5 +31,5 @@ public class Question extends BaseEntity {
 
     @OneToMany
     @JoinColumn(name = "question_id")
-    private Set<Answer> answers = new HashSet<>();
+    private Set<Answer> answers;
 }
