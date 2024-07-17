@@ -2,16 +2,16 @@ logging:
   level:
     root: INFO
     org.springframework.cloud.vault: DEBUG
-#spring:
-#  datasource:
-#    url: jdbc:postgresql://localhost:5433/springdb_problem
-#    username: springproblem
-#    password: abcd1234
-#  jpa:
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.PostgreSQLDialect
-#        format_sql: true
-#        show_sql: true
-#    hibernate:
-#      ddl-auto: update
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/springdb_problem
+    username: springproblem
+    password: abcd1234
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        show_sql: true
+    hibernate:
+      ddl-auto: update
