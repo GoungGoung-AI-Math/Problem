@@ -3,8 +3,6 @@ logging:
     root: INFO
     org.springframework.cloud.vault: DEBUG
 spring:
-  profiles:
-    active: local
   datasource:
     url: jdbc:postgresql://localhost:5433/springdb_problem
     username: springproblem
