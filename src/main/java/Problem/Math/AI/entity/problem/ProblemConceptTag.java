@@ -1,4 +1,4 @@
-package Problem.Math.AI.entity;
+package Problem.Math.AI.entity.problem;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "problem_concep_tag")
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ProblemConcepTag {
+public class ProblemConceptTag {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

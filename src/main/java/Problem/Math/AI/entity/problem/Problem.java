@@ -1,4 +1,4 @@
-package Problem.Math.AI.entity;
+package Problem.Math.AI.entity.problem;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Builder
@@ -35,5 +37,13 @@ public class Problem {
 
     @Column
     private Integer answer;
+
+    @OneToMany
+    @JoinColumn(name = "problem_id")
+    private Set<ProblemConceptTag> problemConceptTags = new HashSet<>();
+
+    @OneToOne
+    @JoinColumn(name = "official_solution_id")
+    private OfficialSolution officialSolution;
 
 }
