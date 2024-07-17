@@ -4,6 +4,7 @@ import Problem.Math.AI.domain.s3file.beans.BucketName;
 import Problem.Math.AI.domain.s3file.beans.S3Region;
 import Problem.Math.AI.domain.s3file.beans.UrlExpiresTime;
 import Problem.Math.AI.domain.s3file.dto.PreSignedUrlRequest;
+import Problem.Math.AI.domain.s3file.exception.S3InvalidException;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
@@ -44,13 +45,14 @@ public class S3Service {
                     .putObjectRequest(objectRequest)
                     .build();
 
-
             PresignedPutObjectRequest presignedRequest = presigner.presignPutObject(presignRequest);
             String myURL = presignedRequest.url().toString();
             log.info("Presigned URL to upload a file to: [{}]", myURL);
             log.info("HTTP method: [{}]", presignedRequest.httpRequest().method());
 
             return presignedRequest.url().toExternalForm();
+        } catch (RuntimeException e){
+            throw new S3InvalidException(e.getMessage(), e);
         }
     }
 }
