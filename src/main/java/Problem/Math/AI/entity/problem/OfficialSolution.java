@@ -1,5 +1,6 @@
 package Problem.Math.AI.entity.problem;
 
+import Problem.Math.AI.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -15,11 +16,7 @@ import java.util.Set;
 @Table(name = "official_solution")
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class OfficialSolution {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class OfficialSolution extends BaseEntity {
 
     @Column(name = "text_solution")
     private String textSolution;
@@ -29,9 +26,6 @@ public class OfficialSolution {
      */
     @Column
     private String source;
-
-    @Column(name = "create_date")
-    private LocalDateTime createDate;
 
     @OneToMany
     @JoinColumn(name = "official_solution_id")

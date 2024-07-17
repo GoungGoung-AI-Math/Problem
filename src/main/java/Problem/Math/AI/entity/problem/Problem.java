@@ -1,5 +1,6 @@
 package Problem.Math.AI.entity.problem;
 
+import Problem.Math.AI.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -15,10 +16,7 @@ import java.util.Set;
 @Table(name = "problem")
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Problem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class Problem extends BaseEntity {
 
     @Column(name = "user_id")
     private Long userId;
@@ -31,9 +29,6 @@ public class Problem {
 
     @Column
     private Double difficulty;
-
-    @Column(name = "create_date")
-    private LocalDateTime createDate;
 
     @Column
     private Integer answer;
