@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -28,6 +27,6 @@ public class OfficialSolution extends BaseEntity {
 
     @OneToMany
     @JoinColumn(name = "official_solution_id")
-    private Set<SolutionContent> solutionContents;
+    private Set<SolutionContentEntity> solutionContents;
 
 }

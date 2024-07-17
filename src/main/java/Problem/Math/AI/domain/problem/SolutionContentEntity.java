@@ -1,6 +1,6 @@
 package Problem.Math.AI.domain.problem;
 
-import Problem.Math.AI.domain.Content;
+import Problem.Math.AI.domain.ContentEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "solution_content")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SolutionContent extends Content {
+public class SolutionContentEntity extends ContentEntity {
 
     @ManyToOne
     @JoinColumn(name = "official_solution_id")

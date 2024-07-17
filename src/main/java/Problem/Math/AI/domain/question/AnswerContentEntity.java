@@ -1,6 +1,6 @@
 package Problem.Math.AI.domain.question;
 
-import Problem.Math.AI.domain.Content;
+import Problem.Math.AI.domain.ContentEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -12,11 +12,11 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Builder
-@Table(name = "solution_content")
+@Table(name = "answer_content")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class QuestionContent extends Content {
+public class AnswerContentEntity extends ContentEntity {
     @ManyToOne
-    @JoinColumn(name = "question_id")
+    @JoinColumn(name = "answer_id")
     private Question question;
 }

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @MappedSuperclass
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Content {
+public class ContentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
