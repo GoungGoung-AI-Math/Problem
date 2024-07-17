@@ -4,6 +4,7 @@ import Problem.Math.AI.domain.s3file.beans.BucketName;
 import Problem.Math.AI.domain.s3file.beans.S3Region;
 import Problem.Math.AI.domain.s3file.beans.UrlExpiresTime;
 import Problem.Math.AI.domain.s3file.dto.PreSignedUrlRequest;
+import Problem.Math.AI.domain.s3file.dto.PreSignedUrlResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,7 @@ class S3ServiceTest {
     @Test
     public void givenValidDto_whenRequest_thenReturnPreSignedUrl(){
         s3Service = new S3Service(bucketName, s3Region, urlExpiresTime);
-        String url = s3Service.createPresignedUrl(validRequest);
-        Assertions.assertFalse(url.isEmpty());
+        PreSignedUrlResponse url = s3Service.createPresignedUrl(validRequest);
+        Assertions.assertFalse(url.getResignedUrl().isEmpty());
     }
 }
