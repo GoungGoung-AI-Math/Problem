@@ -1,6 +1,5 @@
 package Problem.Math.AI.entity;
 
-
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -9,14 +8,20 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Builder
-@Table(name = "concep_tag")
+@Table(name = "problem_concep_tag")
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ConceptTag {
+public class ProblemConcepTag {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "tag_name")
-    private String tageName;
+    @ManyToOne
+    @JoinColumn(name = "problem_id", nullable = false)
+    private Problem problem;
+
+    @ManyToOne
+    @JoinColumn(name = "concep_tag_id", nullable = false)
+    private ConceptTag conceptTag;
+
 }
