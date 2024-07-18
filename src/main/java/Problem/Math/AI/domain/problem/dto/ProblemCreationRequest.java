@@ -19,5 +19,5 @@ public class ProblemCreationRequest {
     private Double difficulty;
     private Integer answer;
     private List<Long> conceptTags;
-    private List<OfficialSolutionCreationRequest> officialSolution;
+    private OfficialSolutionCreationRequest officialSolution;
 }

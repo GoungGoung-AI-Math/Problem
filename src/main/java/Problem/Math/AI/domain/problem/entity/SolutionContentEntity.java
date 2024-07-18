@@ -6,9 +6,10 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Entity
-@Builder
+@SuperBuilder
 @Table(name = "solution_content")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
