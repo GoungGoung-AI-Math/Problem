@@ -6,8 +6,10 @@ import Problem.Math.AI.domain.problem.entity.OfficialSolution;
 import Problem.Math.AI.domain.problem.entity.Problem;
 import Problem.Math.AI.domain.problem.entity.ProblemConceptTag;
 import Problem.Math.AI.domain.problem.exception.InvalidConceptTagException;
+import Problem.Math.AI.domain.problem.exception.ProblemException;
 import Problem.Math.AI.domain.problem.repository.ConceptTagRepository;
 import Problem.Math.AI.domain.problem.repository.OfficialSolutionRepository;
+import Problem.Math.AI.domain.problem.repository.ProblemConceptTagRepository;
 import Problem.Math.AI.domain.problem.repository.ProblemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +28,7 @@ public class ProblemService {
 
     private final ProblemRepository problemRepository;
     private final ConceptTagRepository conceptTagRepository;
-    private final OfficialSolutionRepository officialSolutionRepository;
+    private final ProblemConceptTagRepository problemConceptTagRepository;
 
     /**
      * 문제를 만들 때 순서
@@ -44,9 +46,10 @@ public class ProblemService {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public ProblemCreationResponse createProblem(ProblemCreationRequest request){
         OfficialSolution officialSolution = OfficialSolution.toEntity(request.getOfficialSolution());
-        Set<ProblemConceptTag> conceptTags = createProblemConceptTag(request.getConceptTags());
-        Problem problem = Problem.toEntity(request, conceptTags, officialSolution);
+
+        Problem problem = Problem.toEntity(request, officialSolution);
         Problem savedProblem = problemRepository.save(problem);
+        createProblemConceptTag(request.getConceptTags(), problem);
         return new ProblemCreationResponse(savedProblem.getId());
     }
 
@@ -60,11 +63,20 @@ public class ProblemService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Set<ProblemConceptTag> createProblemConceptTag(List<Long> ids){
-        return findConceptTag(ids).stream()
+    public void createProblemConceptTag(List<Long> ids, Problem problem){
+        List<ProblemConceptTag> problemConceptTags = findConceptTag(ids).stream()
                 .map(tag -> ProblemConceptTag
-                        .builder().conceptTag(tag).build())
-                .collect(Collectors.toSet());
+                        .builder()
+                        .problem(problem)
+                        .conceptTag(tag).build())
+                .toList();
+        try{
+            problemConceptTagRepository.saveAll(problemConceptTags);
+        } catch (RuntimeException e){
+            throw new ProblemException(e.getMessage(), e);
+        }
+
+
     }
 
 }

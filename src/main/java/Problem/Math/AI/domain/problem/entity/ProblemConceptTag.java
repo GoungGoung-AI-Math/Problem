@@ -17,11 +17,11 @@ public class ProblemConceptTag {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "problem_id", nullable = false)
+    @JoinColumn(name = "problem_id")
     private Problem problem;
 
     @ManyToOne
-    @JoinColumn(name = "concep_tag_id", nullable = false)
+    @JoinColumn(name = "concep_tag_id")
     private ConceptTag conceptTag;
 
 }

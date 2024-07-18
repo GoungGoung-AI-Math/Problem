@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -41,15 +42,15 @@ public class Problem extends BaseEntity {
     private OfficialSolution officialSolution;
 
 
-    public static Problem toEntity(ProblemCreationRequest request, Set<ProblemConceptTag> tags, OfficialSolution solution){
+    public static Problem toEntity(ProblemCreationRequest request, OfficialSolution solution){
         return Problem.builder()
                 .userId(request.getUserId())
                 .name(request.getName())
                 .imgUrl(request.getImgUrl())
                 .difficulty(request.getDifficulty())
                 .answer(request.getAnswer())
-                .problemConceptTags(tags)
                 .officialSolution(solution)
+                .createDate(LocalDateTime.now())
                 .build();
     }
 }
