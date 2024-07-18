@@ -36,25 +36,24 @@ public class AttemptService {
      * @param attempt
      */
     public SimpleMarkResponse markAttemptSolution(AttemptMarkRequest attempt) {
-        Map<Boolean, Problem> check = checkAnswer(attempt);
-        ProblemAttempt problemAttempt;
-        if(check.get(Boolean.TRUE) != null){ // 참인 경우
-            problemAttempt = ProblemAttempt.toEntity(attempt, check.get(Boolean.TRUE), Status.PENDING);
-        } else{
-            problemAttempt = ProblemAttempt.toEntity(attempt, check.get(Boolean.FALSE), Status.FAIL);
-        }
+
+        Problem problem = problemRepository.findById(attempt.getProblemId())
+                .orElseThrow(() -> new ProblemException("존재하지 않는 문제입니다."));
+        Status status = problem.getAnswer().equals(attempt.getAnswer()) ? Status.PENDING : Status.FAIL;
+        ProblemAttempt problemAttempt = ProblemAttempt.toEntity(attempt, problem, status);
+
         ProblemAttempt savedProblemAttempt;
-        try{
+        try {
             savedProblemAttempt = attemptRepository.save(problemAttempt);
-        } catch (RuntimeException e){
-            throw new AttemptException(e.getMessage(), e.getCause());
+        } catch (RuntimeException e) {
+            throw new AttemptException("ProblemAttempt 저장 중 오류가 발생했습니다.", e);
         }
-        // gpt에 분석 요청
-        if(check.get(Boolean.TRUE) != null) { // 참인 경우
+
+        if (status == Status.PENDING) {
             try {
                 gptAsyncService.attemptMarkRequest(AttemptMarkGPTMapper.mapTo(attempt, savedProblemAttempt.getId()));
-            } catch (RuntimeException g) {
-                throw new GptAsyncException(g.getMessage(), g.getCause());
+            } catch (RuntimeException e) {
+                throw new GptAsyncException("GPT 분석 요청 중 오류가 발생했습니다.", e);
             }
         }
         return SimpleMarkResponse.builder()
@@ -63,18 +62,4 @@ public class AttemptService {
                 .build();
     }
 
-    private Map<Boolean, Problem> checkAnswer(AttemptMarkRequest attemptMark) {
-        Problem problem = problemRepository.findById(attemptMark.getProblemId())
-                .orElseThrow(() -> new ProblemException("존재하지 않는 문제입니다."));
-        Integer expectAnswer = problem.getAnswer();
-        Integer realAnswer = attemptMark.getAnswer();
-        if(!expectAnswer.equals(realAnswer)){
-            return new HashMap<>(){{
-                put(false, problem);
-            }};
-        }
-        return new HashMap<>(){{
-            put(true, problem);
-        }};
-    }
 }
