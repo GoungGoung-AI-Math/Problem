@@ -1,5 +1,6 @@
 package Problem.Math.AI.domain.s3file.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import java.util.Map;
 @Builder
 @AllArgsConstructor
 public class PreSignedUrlRequest {
+    @JsonProperty("key-name")
     private String keyName;
     private Map<String, String> metadata;
 }

@@ -1,21 +1,22 @@
 package Problem.Math.AI.domain.problem.entity;
 
-import Problem.Math.AI.domain.BaseEntity;
+import Problem.Math.AI.common.entity.BaseEntity;
+import Problem.Math.AI.domain.problem.dto.ProblemCreationRequest;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
-@Builder
+@SuperBuilder
 @Table(name = "problem")
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor()
 public class Problem extends BaseEntity {
 
+    @Getter
     @Column(name = "user_id")
     private Long userId;
 
@@ -28,15 +29,28 @@ public class Problem extends BaseEntity {
     @Column
     private Double difficulty;
 
+    @Getter
     @Column
     private Integer answer;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "problem_id")
     private Set<ProblemConceptTag> problemConceptTags;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "official_solution_id")
     private OfficialSolution officialSolution;
 
+
+    public static Problem toEntity(ProblemCreationRequest request, OfficialSolution solution){
+        return Problem.builder()
+                .userId(request.getUserId())
+                .name(request.getName())
+                .imgUrl(request.getImgUrl())
+                .difficulty(request.getDifficulty())
+                .answer(request.getAnswer())
+                .officialSolution(solution)
+                .createDate(LocalDateTime.now())
+                .build();
+    }
 }

@@ -1,16 +1,17 @@
 package Problem.Math.AI.domain.question;
 
-import Problem.Math.AI.domain.BaseEntity;
+import Problem.Math.AI.common.entity.BaseEntity;
 import Problem.Math.AI.domain.problem.entity.Problem;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.Set;
 
 
 @Entity
-@Builder
-@Table(name = "problem_attempt")
+@SuperBuilder
+@Table(name = "question")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Question extends BaseEntity {
