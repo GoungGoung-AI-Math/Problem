@@ -20,6 +20,8 @@ public class Test extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long userId;
 
+    private String name;
+
     @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
 
