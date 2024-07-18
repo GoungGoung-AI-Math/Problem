@@ -14,7 +14,6 @@ import java.util.List;
 @JsonNaming(value = PropertyNamingStrategy.class)
 public class  AttemptMarkRequest{
     private Long problemId;
-    private AttemptType attemptType;
     private List<ContentRequest> imgUrlsContent;
     private String textContent;
     private Integer answer;
