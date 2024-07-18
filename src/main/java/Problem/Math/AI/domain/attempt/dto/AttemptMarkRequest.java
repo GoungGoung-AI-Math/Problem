@@ -15,6 +15,8 @@ import java.util.List;
 public class  AttemptMarkRequest{
     private Long problemId;
     private AttemptType attemptType;
-    private List<ContentRequest> imgUrls;
+    private List<ContentRequest> imgUrlsContent;
+    private String textContent;
     private Integer answer;
+    private Long userId;
 }

@@ -28,6 +28,7 @@ public class Problem extends BaseEntity {
     @Column
     private Double difficulty;
 
+    @Getter
     @Column
     private Integer answer;
 

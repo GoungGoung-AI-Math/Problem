@@ -15,6 +15,6 @@ import lombok.experimental.SuperBuilder;
 public class AttemptContentEntity extends ContentEntity {
 
     @ManyToOne
-    @JoinColumn(name = "problem_attempt")
+    @JoinColumn(name = "problem_attempt_id")
     private ProblemAttempt problemAttempt;
 }
