@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 
 @Entity
 @SuperBuilder
-@Table(name = "solution_content")
+@Table(name = "question_content")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class QuestionContentEntity extends ContentEntity {

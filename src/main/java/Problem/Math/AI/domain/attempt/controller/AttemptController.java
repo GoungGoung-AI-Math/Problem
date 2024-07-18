@@ -22,6 +22,7 @@ public class AttemptController {
     @PostMapping
     public ResponseEntity<SimpleMarkResponse> sendAttemptToMarking(@RequestBody AttemptMarkRequest attempt){
         SimpleMarkResponse response = attemptService.markAttemptSolution(attempt);
+        log.info("id : {}, status : {}",response.getProblemId(), response.getStatus().getStatus());
         return ResponseEntity.ok(response);
     }
 }

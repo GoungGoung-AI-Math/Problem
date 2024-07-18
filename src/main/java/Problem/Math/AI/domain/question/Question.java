@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Entity
 @SuperBuilder
-@Table(name = "problem_attempt")
+@Table(name = "question")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Question extends BaseEntity {

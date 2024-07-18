@@ -1,8 +1,8 @@
 package Problem.Math.AI.common;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
-@Getter
 public enum AnalysisType {
     ATTEMPT("attempt"),
     QUESTION("question");
@@ -11,4 +11,8 @@ public enum AnalysisType {
         this.type = type;
     }
 
+    @JsonValue
+    public String getType(){
+        return type;
+    }
 }

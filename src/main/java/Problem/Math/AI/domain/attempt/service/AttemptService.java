@@ -57,6 +57,7 @@ public class AttemptService {
             }
         }
         return SimpleMarkResponse.builder()
+                .attemptId(savedProblemAttempt.getId())
                 .problemId(savedProblemAttempt.getId())
                 .status(savedProblemAttempt.getStatus())
                 .build();

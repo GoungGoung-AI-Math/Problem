@@ -1,8 +1,7 @@
 package Problem.Math.AI.domain.attempt.entity;
 
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonValue;
 
-@Getter
 public enum Status {
     PENDING("pending"),
     SUCCESS("success"),
@@ -12,6 +11,11 @@ public enum Status {
 
     Status (String status){
         this.status = status;
+    }
+
+    @JsonValue
+    public String getStatus(){
+        return status;
     }
 
 }
