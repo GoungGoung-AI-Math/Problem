@@ -1,6 +1,6 @@
 package Problem.Math.AI.domain.problem.entity;
 
-import Problem.Math.AI.domain.BaseEntity;
+import Problem.Math.AI.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

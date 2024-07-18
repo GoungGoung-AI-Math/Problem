@@ -1,19 +1,20 @@
-package Problem.Math.AI.domain;
+package Problem.Math.AI.common.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @MappedSuperclass
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ContentEntity {
-
+public class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "img_url")
-    private String imgUrl;
+    @Column(name = "create_date")
+    private LocalDateTime createDate;
 }
