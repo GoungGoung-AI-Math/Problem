@@ -47,7 +47,7 @@ public class ProblemService {
         Set<ProblemConceptTag> conceptTags = createProblemConceptTag(request.getConceptTags());
         Problem problem = Problem.toEntity(request, conceptTags, officialSolution);
         Problem savedProblem = problemRepository.save(problem);
-        return new ProblemCreationResponse(savedProblem.getUserId());
+        return new ProblemCreationResponse(savedProblem.getId());
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)

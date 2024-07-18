@@ -9,8 +9,9 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-@Entity
+@SuperBuilder
 @Builder
 @Table(name = "answer_content")
 @AllArgsConstructor

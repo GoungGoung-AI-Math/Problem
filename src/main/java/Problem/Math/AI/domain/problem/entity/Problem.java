@@ -12,7 +12,7 @@ import java.util.Set;
 @SuperBuilder
 @Table(name = "problem")
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor()
 public class Problem extends BaseEntity {
 
     @Getter
