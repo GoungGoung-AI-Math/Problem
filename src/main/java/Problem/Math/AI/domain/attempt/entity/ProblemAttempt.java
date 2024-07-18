@@ -1,4 +1,4 @@
-package Problem.Math.AI.domain.attempt;
+package Problem.Math.AI.domain.attempt.entity;
 
 import Problem.Math.AI.common.entity.BaseEntity;
 import Problem.Math.AI.domain.problem.entity.Problem;

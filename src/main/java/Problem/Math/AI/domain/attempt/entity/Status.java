@@ -1,4 +1,4 @@
-package Problem.Math.AI.domain.attempt;
+package Problem.Math.AI.domain.attempt.entity;
 
 import lombok.Getter;
 

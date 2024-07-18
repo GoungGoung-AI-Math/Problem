@@ -1,10 +1,9 @@
-package Problem.Math.AI.domain.attempt;
+package Problem.Math.AI.domain.attempt.entity;
 
 import Problem.Math.AI.common.entity.ContentEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
