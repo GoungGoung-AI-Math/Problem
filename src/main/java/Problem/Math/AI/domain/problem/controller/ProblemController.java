@@ -4,10 +4,7 @@ import Problem.Math.AI.domain.problem.dto.ProblemCreationRequest;
 import Problem.Math.AI.domain.problem.dto.ProblemCreationResponse;
 import Problem.Math.AI.domain.problem.service.ProblemService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,9 +13,9 @@ public class ProblemController {
 
     private final ProblemService problemService;
 
-    @GetMapping
+    @PostMapping
     public ProblemCreationResponse createProblem(@RequestBody ProblemCreationRequest request){
-        return null;
+        return problemService.createProblem(request);
     }
 
 }
