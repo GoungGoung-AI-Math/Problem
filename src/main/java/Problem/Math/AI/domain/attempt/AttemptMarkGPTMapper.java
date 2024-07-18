@@ -5,7 +5,8 @@ import Problem.Math.AI.domain.attempt.dto.AttemptMarkRequest;
 
 public class AttemptMarkGPTMapper {
 
-    public static AttemptAnalysisRequest mapTo(AttemptMarkRequest request, Long attempId){
+    public static AttemptAnalysisRequest mapTo(AttemptMarkRequest request, Long attemptId){
+
         return null;
     }
 }
