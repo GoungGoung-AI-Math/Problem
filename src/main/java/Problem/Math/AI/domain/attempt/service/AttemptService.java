@@ -1,12 +1,13 @@
 package Problem.Math.AI.domain.attempt.service;
 
+import Problem.Math.AI.domain.attempt.AttemptMarkGPTMapper;
 import Problem.Math.AI.domain.attempt.dto.AttemptMarkRequest;
 import Problem.Math.AI.domain.attempt.dto.SimpleMarkResponse;
 import Problem.Math.AI.domain.attempt.entity.ProblemAttempt;
 import Problem.Math.AI.domain.attempt.entity.Status;
 import Problem.Math.AI.domain.attempt.exception.AttemptException;
 import Problem.Math.AI.domain.attempt.repository.AttemptRepository;
-import Problem.Math.AI.domain.gpt.GptAsyncService;
+import Problem.Math.AI.domain.gpt.service.GptAsyncService;
 import Problem.Math.AI.domain.gpt.exception.GptAsyncException;
 import Problem.Math.AI.domain.problem.entity.Problem;
 import Problem.Math.AI.domain.problem.exception.ProblemException;
@@ -38,25 +39,28 @@ public class AttemptService {
         Map<Boolean, Problem> check = checkAnswer(attempt);
         ProblemAttempt problemAttempt;
         if(check.get(Boolean.TRUE) != null){ // 참인 경우
-            // gpt에 분석 요청
-            try{
-                gptAsyncService.markRequest(attempt);
-            } catch (RuntimeException g){
-                throw new GptAsyncException(g.getMessage(), g.getCause());
-            }
             problemAttempt = ProblemAttempt.toEntity(attempt, check.get(Boolean.TRUE), Status.PENDING);
         } else{
             problemAttempt = ProblemAttempt.toEntity(attempt, check.get(Boolean.FALSE), Status.FAIL);
         }
+        ProblemAttempt savedProblemAttempt;
         try{
-            ProblemAttempt savedProblemAttempt = attemptRepository.save(problemAttempt);
-            return SimpleMarkResponse.builder()
-                    .problemId(savedProblemAttempt.getId())
-                    .status(savedProblemAttempt.getStatus())
-                    .build();
+            savedProblemAttempt = attemptRepository.save(problemAttempt);
         } catch (RuntimeException e){
             throw new AttemptException(e.getMessage(), e.getCause());
         }
+        // gpt에 분석 요청
+        if(check.get(Boolean.TRUE) != null) { // 참인 경우
+            try {
+                gptAsyncService.attemptMarkRequest(AttemptMarkGPTMapper.mapTo(attempt, savedProblemAttempt.getId()));
+            } catch (RuntimeException g) {
+                throw new GptAsyncException(g.getMessage(), g.getCause());
+            }
+        }
+        return SimpleMarkResponse.builder()
+                .problemId(savedProblemAttempt.getId())
+                .status(savedProblemAttempt.getStatus())
+                .build();
     }
 
     private Map<Boolean, Problem> checkAnswer(AttemptMarkRequest attemptMark) {
