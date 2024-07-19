@@ -8,6 +8,8 @@ import Problem.Math.AI.domain.problem.entity.SolutionContentEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,11 +20,23 @@ import java.util.stream.Collectors;
  * 학생이 문제를 푼 값.
  */
 @Entity
-@SuperBuilder
+@Builder
 @Table(name = "problem_attempt")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ProblemAttempt extends BaseEntity {
+public class ProblemAttempt{
+
+    @Id
+    @Getter
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Column(name = "create_date", updatable = false)
+    @CreatedDate
+    private LocalDateTime createDate;
+
+    @LastModifiedDate
+    private LocalDateTime updatedDate;
 
     @ManyToOne
     @JoinColumn(name = "problem_id", nullable = false)
@@ -50,7 +64,6 @@ public class ProblemAttempt extends BaseEntity {
 
     public static ProblemAttempt toEntity(AttemptMarkRequest request, Problem problem, Status status){
         return ProblemAttempt.builder()
-                .createDate(LocalDateTime.now())
                 .problem(problem)
                 .content(request.getTextContent())
                 .status(status)

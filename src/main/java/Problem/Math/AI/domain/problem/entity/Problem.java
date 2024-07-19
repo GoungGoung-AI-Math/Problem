@@ -5,16 +5,29 @@ import Problem.Math.AI.domain.problem.dto.ProblemCreationRequest;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
-@SuperBuilder
+@Builder
 @Table(name = "problem")
 @AllArgsConstructor
 @NoArgsConstructor()
-public class Problem extends BaseEntity {
+public class Problem {
+    @Id
+    @Getter
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Column(name = "create_date", updatable = false)
+    @CreatedDate
+    private LocalDateTime createDate;
+
+    @LastModifiedDate
+    private LocalDateTime updatedDate;
 
     @Getter
     @Column(name = "user_id")
@@ -50,7 +63,6 @@ public class Problem extends BaseEntity {
                 .difficulty(request.getDifficulty())
                 .answer(request.getAnswer())
                 .officialSolution(solution)
-                .createDate(LocalDateTime.now())
                 .build();
     }
 }
