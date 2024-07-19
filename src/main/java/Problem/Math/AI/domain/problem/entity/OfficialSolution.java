@@ -4,11 +4,10 @@ import Problem.Math.AI.common.dto.ContentRequest;
 import Problem.Math.AI.common.entity.BaseEntity;
 import Problem.Math.AI.domain.problem.dto.OfficialSolutionCreationRequest;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,11 +15,23 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
-@SuperBuilder
+@Builder
 @Table(name = "official_solution")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class OfficialSolution extends BaseEntity {
+public class OfficialSolution{
+
+    @Id
+    @Getter
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Column(name = "create_date", updatable = false)
+    @CreatedDate
+    private LocalDateTime createDate;
+
+    @LastModifiedDate
+    private LocalDateTime updatedDate;
 
     @Column(name = "text_solution")
     private String textSolution;
@@ -38,7 +49,6 @@ public class OfficialSolution extends BaseEntity {
     public static OfficialSolution toEntity(OfficialSolutionCreationRequest request) {
 
         return OfficialSolution.builder()
-                .createDate(LocalDateTime.now())
                 .textSolution(request.getTextSolution())
                 .source(request.getSource())
                 .solutionContents(toEntity(request.getImgSolutions()))
