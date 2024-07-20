@@ -35,7 +35,8 @@ public class Exam {
     @Enumerated(EnumType.STRING)
     private Type type;
 
-    @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "exam_id")
     private Set<Problem> problems;
 
     @Column(name = "total_solved")
