@@ -37,3 +37,4 @@ out/
 .vscode/
 postgres_data_problem/*
 src/main/resources/application-local.properties
+docker-compose.yml
