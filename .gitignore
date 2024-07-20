@@ -37,9 +37,9 @@ out/
 .vscode/
 
 ### local environment
-postgres_data_problem/*
+/postgres_data_problem/*
 src/main/resources/application-local.properties
 docker-compose.yml
 
 ### generated QClass directory
-src/main/generated/**
+/src/main/generated/**
