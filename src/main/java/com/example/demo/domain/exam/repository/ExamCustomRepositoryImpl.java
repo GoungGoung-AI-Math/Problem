@@ -38,10 +38,12 @@ public class ExamCustomRepositoryImpl implements ExamCustomRepository {
         List<SearchExamResponse> responses = queryFactory
                 .select(Projections.constructor(SearchExamResponse.class,
                         exam.name,
+                        exam.createDate,
                         exam.difficulty,
                         exam.type,
-                        exam.revisionState
-                        ))
+                        exam.revisionState,
+                        exam.totalSolved
+                ))
                 .from(exam)
                 .where(builder)
                 .offset(pageable.getOffset())
