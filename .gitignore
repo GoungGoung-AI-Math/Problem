@@ -35,3 +35,5 @@ out/
 
 ### VS Code ###
 .vscode/
+postgres_data_problem/*
+src/main/resources/application-local.properties
