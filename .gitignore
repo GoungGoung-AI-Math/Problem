@@ -35,3 +35,10 @@ out/
 
 ### VS Code ###
 .vscode/
+
+## Avro file
+src/generated/**
+## QClass
+src/main/generated/**
+## DB
+postgres_data_problem/**
