@@ -42,4 +42,4 @@ src/main/resources/application-local.properties
 docker-compose.yml
 
 ### generated QClass directory
-src/main/generated
+src/main/generated/**
