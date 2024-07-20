@@ -1,5 +1,6 @@
 package com.example.demo.domain.problem.entity;
 
+import com.example.demo.domain.exam.entity.Exam;
 import com.example.demo.domain.problem.dto.ProblemCreationRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -42,6 +43,10 @@ public class Problem {
 
     @Column
     private Double difficulty;
+
+    @ManyToOne
+    @JoinColumn(name = "exam_id")
+    private Exam exam;
 
     @Getter
     @Column
