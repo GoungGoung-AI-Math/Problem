@@ -64,6 +64,8 @@ dependencies {
 	implementation group: 'io.confluent', name: 'kafka-avro-serializer', version: '6.1.0'
 	// https://mvnrepository.com/artifact/io.confluent/kafka-streams-avro-serde
 	implementation group: 'io.confluent', name: 'kafka-streams-avro-serde', version: '7.6.0'
+	// Avro Build file
+	implementation files('my-kafka-infra/avro/build/libs/avro-0.0.1-SNAPSHOT.jar')
 
 }
 
