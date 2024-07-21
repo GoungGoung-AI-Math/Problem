@@ -18,7 +18,7 @@ public class Exam {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false)
+    @Column()
     private Long userId;
 
     private String name;
@@ -40,4 +40,10 @@ public class Exam {
 
     @Column(name = "total_solved")
     private Long totalSolved;
+
+
+    public Exam(String name, Long totalSolved) {
+        this.name = name;
+        this.totalSolved = totalSolved;
+    }
 }
