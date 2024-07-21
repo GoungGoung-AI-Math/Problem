@@ -25,7 +25,7 @@ bin/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-
+my-kafka-infra/avro/build
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
