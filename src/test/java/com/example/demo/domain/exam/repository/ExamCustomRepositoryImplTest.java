@@ -42,12 +42,9 @@ class ExamCustomRepositoryImplTest {
         Exam exam4 = new Exam(4L, 4L, "202305", LocalDateTime.now(), Difficulty.a, RevisionState.a, Type.a, problems, 40L);
         Exam exam5 = new Exam(5L, 5L, "202306", LocalDateTime.now(), Difficulty.b, RevisionState.b, Type.b, problems, 50L);
         Exam exam6 = new Exam(6L, 6L, "202307", LocalDateTime.now(), Difficulty.c, RevisionState.c, Type.c, problems, 60L);
-        examRepository.save(exam1);
-        examRepository.save(exam2);
-        examRepository.save(exam3);
-        examRepository.save(exam4);
-        examRepository.save(exam5);
-        examRepository.save(exam6);
+        Exam exam7 = new Exam(7L, 7L, "202401", LocalDateTime.now(), Difficulty.a, RevisionState.a, Type.a, problems, 70L);
+        Exam exam8 = new Exam(8L, 8L, "202402", LocalDateTime.now(), Difficulty.b, RevisionState.b, Type.b, problems, 80L);
+        examRepository.saveAll(Arrays.asList(exam1, exam2, exam3, exam4, exam5, exam6, exam7, exam8));
     }
 
     @Test
@@ -81,8 +78,8 @@ class ExamCustomRepositoryImplTest {
 
         // then: 검색 결과를 검증
         assertThat(result).isNotNull();
-        assertThat(result.getTotalElements()).isEqualTo(4);
-        assertThat(result.getContent()).extracting("examName").containsExactlyInAnyOrder("202301", "202302", "202305", "202306");
+        assertThat(result.getTotalElements()).isEqualTo(6);
+        assertThat(result.getContent()).extracting("examName").containsExactlyInAnyOrder("202301", "202302", "202305", "202306", "202401", "202402");
     }
 
     @Test
@@ -119,7 +116,7 @@ class ExamCustomRepositoryImplTest {
 
         // then: 검색 결과를 검증
         assertThat(result).isNotNull();
-        assertThat(result.getTotalElements()).isEqualTo(4);
-        assertThat(result.getContent()).extracting("examName").containsExactlyInAnyOrder("202301", "202303", "202305", "202307");
+        assertThat(result.getTotalElements()).isEqualTo(5);
+        assertThat(result.getContent()).extracting("examName").containsExactlyInAnyOrder("202301", "202303", "202305", "202307", "202401");
     }
 }
