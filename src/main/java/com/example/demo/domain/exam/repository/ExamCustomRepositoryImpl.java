@@ -34,6 +34,9 @@ public class ExamCustomRepositoryImpl implements ExamCustomRepository {
         if (condition.getMonth() != null) {
             builder.and(exam.name.contains(String.format("%02d", condition.getMonth())));
         }
+        if (condition.getType() != null) {
+            builder.and(exam.type.eq(condition.getType()));
+        }
 
         List<SearchExamResponse> responses = queryFactory
                 .select(Projections.constructor(SearchExamResponse.class,

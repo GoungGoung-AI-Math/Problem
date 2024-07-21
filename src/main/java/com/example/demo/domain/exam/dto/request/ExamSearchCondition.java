@@ -1,5 +1,6 @@
 package com.example.demo.domain.exam.dto.request;
 
+import com.example.demo.domain.exam.entity.Type;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ public class ExamSearchCondition {
     private Integer startYear;
     private Integer endYear;
     private Integer month;
+    private Type type;
     private Integer page;
     private Integer pageSize;
 }
