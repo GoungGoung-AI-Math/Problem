@@ -1,12 +1,13 @@
 package com.example.demo.domain.attempt.mapper;
 
+import com.example.demo.domain.attempt.dto.AttemptAnalysisRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
 @Component
 public class AttemptAnalysisDataMapper {
-//    public PaymentRequestAvroModel attemptAnalysisRequest(OrderCreatedEvent orderCreatedEvent) {
+//    public AttemptAnalysisRequestAvroModel attemptAnalysisRequest(AttemptAnalysisRequest attemptAnalysisRequest) {
 //        Order order = orderCreatedEvent.getOrder();
 //        return PaymentRequestAvroModel.newBuilder()
 //                .setId(UUID.randomUUID().toString())

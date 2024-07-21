@@ -2,8 +2,6 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.2'
 	id 'io.spring.dependency-management' version '1.1.6'
-	// Avro
-//	id 'com.github.davidmc24.gradle.plugin.avro-base'  version '1.0.0'
 }
 
 group = 'com.example'
@@ -22,8 +20,10 @@ configurations {
 }
 
 repositories {
-	gradlePluginPortal()
 	mavenCentral()
+	maven {
+		url "https://packages.confluent.io/maven"
+	}
 }
 
 ext {
@@ -58,9 +58,12 @@ dependencies {
 	// Kafka
 	implementation 'org.springframework.kafka:spring-kafka'
 	// Avro
-	implementation group: 'org.apache.avro', name: 'avro', version: '1.10.2'
-	implementation group: 'io.confluent', name: 'kafka-avro-serializer', version: '5.5.1'
-	implementation group: 'io.confluent', name: 'kafka-streams-avro-serde', version: '5.5.1'
+	// https://mvnrepository.com/artifact/org.apache.avro/avro
+	implementation group: 'org.apache.avro', name: 'avro', version: '1.11.3'
+	// https://mvnrepository.com/artifact/io.confluent/kafka-avro-serializer
+	implementation group: 'io.confluent', name: 'kafka-avro-serializer', version: '6.1.0'
+	// https://mvnrepository.com/artifact/io.confluent/kafka-streams-avro-serde
+	implementation group: 'io.confluent', name: 'kafka-streams-avro-serde', version: '7.6.0'
 
 }
 
@@ -74,9 +77,11 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-//def generateAvro = tasks.register("generateAvro", com.github.davidmc24.gradle.plugin.avro.GenerateAvroJavaTask) {
-//	source("src/main/avro")
-//	outputDir = file("src/generated/main/java")
-//	fieldVisibility = "PRIVATE"
-//	enableDecimalLogicalType = true
-//}
+// KafkaInfra 에서 생성한 Avro를 가져오기
+sourceSets {
+	main {
+		java {
+			srcDirs += 'my-kafka-infra/avro/src/generated/main/java'
+		}
+	}
+}
