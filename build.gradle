@@ -67,8 +67,6 @@ dependencies {
 	// https://mvnrepository.com/artifact/io.confluent/kafka-streams-avro-serde
 	implementation group: 'io.confluent', name: 'kafka-streams-avro-serde', version: '7.6.0'
 	// Avro Build file
-	// my-kafka-infra:avro 서브 프로젝트의 의존성 추가
-	implementation project(':my-kafka-infra:avro')
 
 }
 
@@ -84,8 +82,8 @@ tasks.named('test') {
 
 // avro build
 def generateAvro = tasks.register("generateAvro", com.github.davidmc24.gradle.plugin.avro.GenerateAvroJavaTask) {
-	source("src/main/java/com/example/demo/my-kafka-infra")
-	outputDir = file("src/generated/main/java")
+	source("src/main/java/com/example/demo/my-kafka-infra/avro")
+	outputDir = file("src/main/java/com/example/demo/my-kafka-infra/avrobuild")
 	fieldVisibility = "PRIVATE"
 	enableDecimalLogicalType = true
 }
