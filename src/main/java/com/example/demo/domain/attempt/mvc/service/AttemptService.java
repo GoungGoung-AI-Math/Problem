@@ -68,7 +68,7 @@ public class AttemptService {
                 analysisRequest(attempt,
                         savedProblemAttempt.getId(),
                         problem.getImgUrl(),
-                        problem.getOfficialSolution().getSolutionContents());
+                        problem.getOfficialSolution());
                 log.info("나중에 publisher 로 gpt에게 attempt를 분석 요청!");
             } catch (RuntimeException e) {
                 throw new KafkaException("GPT 분석 요청 중 오류가 발생했습니다.", e);
