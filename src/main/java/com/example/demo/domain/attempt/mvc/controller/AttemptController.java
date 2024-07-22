@@ -1,14 +1,14 @@
 package com.example.demo.domain.attempt.mvc.controller;
 
 
-import com.example.demo.common.AnalysisType;
-import com.example.demo.domain.attempt.kafka.event.AttemptAnalysisRequestDto;
 import com.example.demo.domain.attempt.kafka.event.AttemptAnalysisRequestEvent;
 import com.example.demo.domain.attempt.kafka.publisher.AttemptAnalysisRequestPublisher;
 import com.example.demo.domain.attempt.mvc.dto.AttemptMarkRequest;
 import com.example.demo.domain.attempt.mvc.dto.SimpleMarkResponse;
 import com.example.demo.domain.attempt.mvc.service.AttemptService;
-import com.example.demo.domain.gpt.dto.MessageType;
+import com.example.demo.my.kafka.infra.kafka.dtos.AnalysisType;
+import com.example.demo.my.kafka.infra.kafka.dtos.MessageType;
+import com.example.demo.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +42,7 @@ public class AttemptController {
                 .analysisType(AnalysisType.ATTEMPT)
                 .messageType(MessageType.TEXT)
                 .attemptId(1L)
-                .content("테스트 가러 갑니다!!~ kafka야 동작해야!!")
+                .content(List.of("테스트 가러 갑니다!!~ kafka야 동작해야!!"))
                 .build();
         AttemptAnalysisRequestEvent event = AttemptAnalysisRequestEvent.builder()
                 .attemptAnalysisDto(dto)

@@ -1,20 +1,29 @@
 package com.example.demo.domain.attempt.mvc.service;
 
+import com.example.demo.common.dto.ContentRequest;
+import com.example.demo.domain.attempt.kafka.event.AttemptAnalysisRequestEvent;
 import com.example.demo.domain.attempt.kafka.publisher.AttemptAnalysisRequestPublisher;
 import com.example.demo.domain.attempt.mvc.dto.AttemptMarkRequest;
 import com.example.demo.domain.attempt.mvc.dto.SimpleMarkResponse;
+import com.example.demo.domain.attempt.mvc.entity.AttemptType;
 import com.example.demo.domain.attempt.mvc.entity.ProblemAttempt;
 import com.example.demo.domain.attempt.mvc.entity.Status;
 import com.example.demo.domain.attempt.exception.AttemptException;
 import com.example.demo.domain.attempt.mvc.repository.AttemptRepository;
-import com.example.demo.domain.gpt.exception.GptAsyncException;
-import com.example.demo.domain.gpt.service.GptAsyncService;
 import com.example.demo.domain.problem.entity.Problem;
 import com.example.demo.domain.problem.exception.ProblemException;
 import com.example.demo.domain.problem.repository.ProblemRepository;
+import com.example.demo.my.kafka.infra.kafka.dtos.MessageType;
+import com.example.demo.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.common.KafkaException;
 import org.springframework.stereotype.Service;
+
+import java.time.ZonedDateTime;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -48,10 +57,10 @@ public class AttemptService {
 
         if (status == Status.PENDING) {
             try {
-//                gptAsyncService.attemptMarkRequest(AttemptMarkGPTMapper.mapTo(attempt, savedProblemAttempt.getId()));
+                analysisRequest(attempt, savedProblemAttempt.getId());
                 log.info("나중에 publisher 로 gpt에게 attempt를 분석 요청!");
             } catch (RuntimeException e) {
-                throw new GptAsyncException("GPT 분석 요청 중 오류가 발생했습니다.", e);
+                throw new KafkaException("GPT 분석 요청 중 오류가 발생했습니다.", e);
             }
         }
         return SimpleMarkResponse.builder()
@@ -59,6 +68,34 @@ public class AttemptService {
                 .problemId(savedProblemAttempt.getId())
                 .status(savedProblemAttempt.getStatus())
                 .build();
+    }
+
+    private void analysisRequest(AttemptMarkRequest attempt, Long attemptId) {
+        List<String> content;
+        MessageType messageType;
+
+        if (attempt.getType() == AttemptType.TEXT) {
+            content = Collections.singletonList(attempt.getTextContent());
+            messageType = MessageType.TEXT;
+        } else if (attempt.getType() == AttemptType.IMAGE_URL) {
+            content = attempt.getImgUrlsContent().stream()
+                    .map(ContentRequest::getImgUrl)
+                    .collect(Collectors.toList());
+            messageType = MessageType.IMAGE_URL;
+        } else {
+            throw new IllegalArgumentException("Unsupported AttemptType: " + attempt.getType());
+        }
+
+        AttemptAnalysisRequestEvent event = AttemptAnalysisRequestEvent.builder()
+                .attemptAnalysisEventDomainEventPublisher(attemptAnalysisRequestPublisher)
+                .createdAt(ZonedDateTime.now())
+                .attemptAnalysisDto(AttemptAnalysisRequestDto.builder()
+                        .attemptId(attemptId)
+                        .content(content) // AttemptType에 따라 설정된 content
+                        .messageType(messageType) // AttemptType에 따라 설정된 messageType
+                        .build())
+                .build();
+        event.fire();
     }
 
 }
