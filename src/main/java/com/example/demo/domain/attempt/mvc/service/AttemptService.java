@@ -1,6 +1,5 @@
 package com.example.demo.domain.attempt.mvc.service;
 
-import com.example.demo.common.dto.ContentRequest;
 import com.example.demo.domain.attempt.kafka.event.AttemptAnalysisRequestEvent;
 import com.example.demo.domain.attempt.kafka.publisher.AttemptAnalysisRequestPublisher;
 import com.example.demo.domain.attempt.mvc.dto.AttemptMarkRequest;
@@ -10,7 +9,9 @@ import com.example.demo.domain.attempt.mvc.entity.ProblemAttempt;
 import com.example.demo.domain.attempt.mvc.entity.Status;
 import com.example.demo.domain.attempt.exception.AttemptException;
 import com.example.demo.domain.attempt.mvc.repository.AttemptRepository;
+import com.example.demo.domain.problem.entity.OfficialSolution;
 import com.example.demo.domain.problem.entity.Problem;
+import com.example.demo.domain.problem.entity.SolutionContentEntity;
 import com.example.demo.domain.problem.exception.ProblemException;
 import com.example.demo.domain.problem.repository.ProblemRepository;
 import com.example.demo.domain.review.entity.Review;
@@ -26,12 +27,10 @@ import org.apache.kafka.common.KafkaException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -51,11 +50,12 @@ public class AttemptService {
      */
     public SimpleMarkResponse markAttemptSolution(AttemptMarkRequest attempt) {
         log.info("problem id : {}, content : {}",attempt.getProblemId(), attempt.getTextContent());
-        Problem problem = problemRepository.findById(attempt.getProblemId())
-                .orElseThrow(() -> new ProblemException("존재하지 않는 문제입니다."));
+        Problem problem = problemRepository.findByIdWithSolution(attempt.getProblemId());
+        if(problem == null) throw new ProblemException("존재하지 않는 문제입니다.");
+
         Status status = problem.getAnswer().equals(attempt.getAnswer()) ? Status.PENDING : Status.FAIL;
         ProblemAttempt problemAttempt = ProblemAttempt.toEntity(attempt, problem, status);
-        String problemImgUrl = problem.getImgUrl();
+
         ProblemAttempt savedProblemAttempt;
         try {
             savedProblemAttempt = attemptRepository.save(problemAttempt);
@@ -65,7 +65,10 @@ public class AttemptService {
 
         if (status == Status.PENDING) {
             try {
-                analysisRequest(attempt, savedProblemAttempt.getId(), problemImgUrl);
+                analysisRequest(attempt,
+                        savedProblemAttempt.getId(),
+                        problem.getImgUrl(),
+                        problem.getOfficialSolution().getSolutionContents());
                 log.info("나중에 publisher 로 gpt에게 attempt를 분석 요청!");
             } catch (RuntimeException e) {
                 throw new KafkaException("GPT 분석 요청 중 오류가 발생했습니다.", e);
@@ -84,9 +87,16 @@ public class AttemptService {
         reviewRepository.save(review);
     }
 
-    private void analysisRequest(AttemptMarkRequest attempt, Long attemptId, String problemImgUrl) {
+    private void analysisRequest(AttemptMarkRequest attempt, Long attemptId, String problemImgUrl, OfficialSolution officialSolution) {
         List<ContentDto> contents = new ArrayList<>();
+        // 문제 사진 입력
         contents.add(new ContentDto(MessageType.IMAGE_URL, problemImgUrl));
+        // 정답 정보 입력
+        if(!officialSolution.getTextSolution().isBlank()){
+            contents.add(new ContentDto(MessageType.TEXT, officialSolution.getTextSolution()));
+        }
+        officialSolution.getSolutionContents()
+                .forEach(solution -> contents.add(new ContentDto(MessageType.IMAGE_URL, solution.getImgUrl())));
 
         // 학생의 풀이가 Text인 경우
         if (attempt.getType() == AttemptType.TEXT) {

@@ -60,6 +60,7 @@ public class Problem {
     @JoinColumn(name = "problem_id")
     private Set<ProblemConceptTag> problemConceptTags;
 
+    @Getter
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "official_solution_id")
     private OfficialSolution officialSolution;

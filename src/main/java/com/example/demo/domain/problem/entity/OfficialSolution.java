@@ -31,6 +31,7 @@ public class OfficialSolution{
     @LastModifiedDate
     private LocalDateTime updatedDate;
 
+    @Getter
     @Column(name = "text_solution")
     private String textSolution;
 
@@ -40,6 +41,7 @@ public class OfficialSolution{
     @Column
     private String source;
 
+    @Getter
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "official_solution_id")
     private Set<SolutionContentEntity> solutionContents;
