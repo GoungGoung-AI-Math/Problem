@@ -1,5 +1,6 @@
 package com.example.demo.domain.attempt.kafka.listenser;
 
+import com.example.demo.domain.attempt.mvc.service.AttemptService;
 import com.example.demo.my.kafka.infra.avrobuild.AttemptAnalysisResponseAvroModel;
 import com.example.demo.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisResponseDto;
 import com.example.demo.my.kafka.infra.kafka.listener.kafka.KafkaConsumer;
@@ -20,6 +21,7 @@ import java.util.List;
 public class AttemptAnalysisResponseKafkaListener implements KafkaConsumer<AttemptAnalysisResponseAvroModel> {
 
     private final AttemptAnalysisDataMapper attemptAnalysisDataMapper;
+    private final AttemptService attemptService;
 
     @Override
     @KafkaListener(id = "${kafka-consumer.attempt-analysis-consumer-group-id}", topics = "${problem-service.attempt-analysis-response-topic-name}")
@@ -36,6 +38,7 @@ public class AttemptAnalysisResponseKafkaListener implements KafkaConsumer<Attem
         messages.forEach(avroModel -> {
             AttemptAnalysisResponseDto dto = attemptAnalysisDataMapper.avroModelToAttemptAnalysisResponseDto(avroModel);
             log.info("Processing successful analysis for attempt id: {} type : {} \n content : {}", dto.getAttemptId(), dto.getMessageType(), dto.getContent());
+            attemptService.saveAttemptAnalysis(dto);
         });
     }
 }

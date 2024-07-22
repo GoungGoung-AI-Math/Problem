@@ -18,7 +18,7 @@ import java.util.Set;
 @Builder
 @Table(name = "problem")
 @AllArgsConstructor
-@NoArgsConstructor()
+@NoArgsConstructor
 public class Problem {
     @Id
     @Getter
@@ -71,6 +71,7 @@ public class Problem {
                 .difficulty(request.getDifficulty())
                 .answer(request.getAnswer())
                 .officialSolution(solution)
+                .createDate(LocalDateTime.now())
                 .build();
     }
 }

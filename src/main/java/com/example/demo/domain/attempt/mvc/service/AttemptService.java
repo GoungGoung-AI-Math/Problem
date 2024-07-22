@@ -16,10 +16,12 @@ import com.example.demo.domain.problem.repository.ProblemRepository;
 import com.example.demo.my.kafka.infra.kafka.dtos.AnalysisType;
 import com.example.demo.my.kafka.infra.kafka.dtos.MessageType;
 import com.example.demo.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisRequestDto;
+import com.example.demo.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.KafkaException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
 import java.util.Collections;
@@ -102,4 +104,9 @@ public class AttemptService {
         event.fire();
     }
 
+    @Transactional
+    public void saveAttemptAnalysis(AttemptAnalysisResponseDto dto) {
+
+
+    }
 }
