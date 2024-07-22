@@ -19,6 +19,7 @@ import com.example.demo.my.kafka.infra.kafka.dtos.AnalysisType;
 import com.example.demo.my.kafka.infra.kafka.dtos.MessageType;
 import com.example.demo.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisRequestDto;
 import com.example.demo.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisResponseDto;
+import com.example.demo.my.kafka.infra.kafka.dtos.attempt.analysis.ContentDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.KafkaException;
@@ -27,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -83,19 +85,16 @@ public class AttemptService {
     }
 
     private void analysisRequest(AttemptMarkRequest attempt, Long attemptId, String problemImgUrl) {
-        List<String> content;
-        MessageType messageType;
+        List<ContentDto> contents = new ArrayList<>();
+        contents.add(new ContentDto(MessageType.IMAGE_URL, problemImgUrl));
 
         // 학생의 풀이가 Text인 경우
         if (attempt.getType() == AttemptType.TEXT) {
-            content = Collections.singletonList(attempt.getTextContent());
-            messageType = MessageType.TEXT;
+            contents.add(new ContentDto(MessageType.TEXT, attempt.getTextContent()));
             // 학생의 풀이가 Image인 경우
         } else if (attempt.getType() == AttemptType.IMAGE_URL) {
-            content = attempt.getImgUrlsContent().stream()
-                    .map(ContentRequest::getImgUrl)
-                    .collect(Collectors.toList());
-            messageType = MessageType.IMAGE_URL;
+            attempt.getImgUrlsContent().forEach(imgUrl ->
+                    contents.add(new ContentDto(MessageType.IMAGE_URL, imgUrl.getImgUrl())));
         } else {
             throw new IllegalArgumentException("Unsupported AttemptType: " + attempt.getType());
         }
@@ -105,9 +104,8 @@ public class AttemptService {
                 .createdAt(ZonedDateTime.now())
                 .attemptAnalysisDto(AttemptAnalysisRequestDto.builder()
                         .attemptId(attemptId)
-                        .content(content) // AttemptType에 따라 설정된 content
+                        .contents(contents) // AttemptType에 따라 설정된 content
                         .analysisType(AnalysisType.ATTEMPT)
-                        .messageType(messageType) // AttemptType에 따라 설정된 messageType
                         .build())
                 .build();
         event.fire();
