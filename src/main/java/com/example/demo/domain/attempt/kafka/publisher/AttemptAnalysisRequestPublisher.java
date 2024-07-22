@@ -2,6 +2,7 @@ package com.example.demo.domain.attempt.kafka.publisher;
 
 import com.example.demo.domain.attempt.kafka.event.AttemptAnalysisEvent;
 import com.example.demo.domain.attempt.kafka.mapper.AttemptAnalysisDataMapper;
+import com.example.demo.my.kafka.infra.avrobuild.AttemptAnalysisRequestAvroModel;
 import com.example.demo.my.kafka.infra.avrobuild.AttemptAnalysisResponseAvroModel;
 import com.example.demo.my.kafka.infra.kafka.config.ProblemServiceKafkaConfigData;
 import com.example.demo.my.kafka.infra.kafka.producer.KafkaProducer;
@@ -16,20 +17,20 @@ import org.springframework.stereotype.Component;
 public class AttemptAnalysisRequestPublisher implements DomainEventPublisher<AttemptAnalysisEvent> {
 
     private final AttemptAnalysisDataMapper attemptAnalysisDataMapper;
-    private final KafkaProducer<String, AttemptAnalysisResponseAvroModel> kafkaProducer;
+    private final KafkaProducer<String, AttemptAnalysisRequestAvroModel> kafkaProducer;
     private final ProblemServiceKafkaConfigData problemServiceKafkaConfigData;
     @Override
     public void publish(AttemptAnalysisEvent domainEvent) {
         Long attemptId = domainEvent.getAttemptAnalysisDto().getAttemptId();
         log.info("Received AttemptAnalysisEvent for attempt id: {}", attemptId);
         try {
-            AttemptAnalysisResponseAvroModel attemptAnalysisResponseAvroModel =
+            AttemptAnalysisRequestAvroModel attemptAnalysisRequestAvroModel =
                     attemptAnalysisDataMapper
-                            .attemptAnalysisResponseToAvroModel(domainEvent.getAttemptAnalysisDto());
+                            .attemptAnalysisRequestToAvroModel(domainEvent.getAttemptAnalysisDto());
 
-            kafkaProducer.send(problemServiceKafkaConfigData.getAttemptAnalysisResponseTopicName(),
+            kafkaProducer.send(problemServiceKafkaConfigData.getAttemptAnalysisRequestTopicName(),
                     String.valueOf(attemptId),
-                    attemptAnalysisResponseAvroModel);
+                    attemptAnalysisRequestAvroModel);
 
             log.info("AttemptAnalysisResponseAvroModel sent to kafka at: {}", System.nanoTime());
         } catch (Exception e) {
