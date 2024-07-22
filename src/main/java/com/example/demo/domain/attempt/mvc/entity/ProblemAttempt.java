@@ -79,4 +79,8 @@ public class ProblemAttempt{
                         .imgUrl(req.getImgUrl()).build())
                 .collect(Collectors.toSet());
     }
+
+    public void updateState(Status status) {
+        this.status = status;
+    }
 }

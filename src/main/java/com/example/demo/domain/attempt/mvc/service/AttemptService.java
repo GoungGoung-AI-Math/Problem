@@ -48,6 +48,7 @@ public class AttemptService {
      * 3-1. 시도 응답
      * @param attempt
      */
+    @Transactional
     public SimpleMarkResponse markAttemptSolution(AttemptMarkRequest attempt) {
         log.info("problem id : {}, content : {}",attempt.getProblemId(), attempt.getTextContent());
         Problem problem = problemRepository.findByIdWithSolution(attempt.getProblemId());
@@ -69,7 +70,6 @@ public class AttemptService {
                         savedProblemAttempt.getId(),
                         problem.getImgUrl(),
                         problem.getOfficialSolution());
-                log.info("나중에 publisher 로 gpt에게 attempt를 분석 요청!");
             } catch (RuntimeException e) {
                 throw new KafkaException("GPT 분석 요청 중 오류가 발생했습니다.", e);
             }
@@ -83,8 +83,13 @@ public class AttemptService {
 
     @Transactional
     public void saveAttemptAnalysis(AttemptAnalysisResponseDto dto) {
+        // 분석 저장
         Review review = Review.aiAnalysis(dto.getContent());
         reviewRepository.save(review);
+        // attempt 상태 수정
+        ProblemAttempt attempt = attemptRepository.findById(dto.getAttemptId())
+                .orElseThrow(()-> new AttemptException("존재하지 않는 시도입니다."));
+        attempt.updateState(Status.SUCCESS);
     }
 
     private void analysisRequest(AttemptMarkRequest attempt, Long attemptId, String problemImgUrl, OfficialSolution officialSolution) {
@@ -92,7 +97,7 @@ public class AttemptService {
         // 문제 사진 입력
         contents.add(new ContentDto(MessageType.IMAGE_URL, problemImgUrl));
         // 정답 정보 입력
-        if(!officialSolution.getTextSolution().isBlank()){
+        if(!(officialSolution.getTextSolution() == null || officialSolution.getTextSolution().isBlank())){
             contents.add(new ContentDto(MessageType.TEXT, officialSolution.getTextSolution()));
         }
         officialSolution.getSolutionContents()
