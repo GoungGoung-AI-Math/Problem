@@ -43,7 +43,7 @@ public class AttemptService {
      * @param attempt
      */
     public SimpleMarkResponse markAttemptSolution(AttemptMarkRequest attempt) {
-
+        log.info("problem id : {}, content : {}",attempt.getProblemId(), attempt.getTextContent());
         Problem problem = problemRepository.findById(attempt.getProblemId())
                 .orElseThrow(() -> new ProblemException("존재하지 않는 문제입니다."));
         Status status = problem.getAnswer().equals(attempt.getAnswer()) ? Status.PENDING : Status.FAIL;

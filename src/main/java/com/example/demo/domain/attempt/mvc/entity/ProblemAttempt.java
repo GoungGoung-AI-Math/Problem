@@ -9,6 +9,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -71,6 +72,9 @@ public class ProblemAttempt{
     }
 
     private static Set<AttemptContentEntity> toEntity(List<ContentRequest> requests){
+        if(requests==null || requests.isEmpty()){
+            return new HashSet<>();
+        }
         return requests.parallelStream().map( req -> AttemptContentEntity.builder()
                         .imgUrl(req.getImgUrl()).build())
                 .collect(Collectors.toSet());

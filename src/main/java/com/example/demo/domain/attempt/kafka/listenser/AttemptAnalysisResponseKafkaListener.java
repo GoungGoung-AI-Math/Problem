@@ -35,7 +35,7 @@ public class AttemptAnalysisResponseKafkaListener implements KafkaConsumer<Attem
 
         messages.forEach(avroModel -> {
             AttemptAnalysisResponseDto dto = attemptAnalysisDataMapper.avroModelToAttemptAnalysisResponseDto(avroModel);
-            log.info("Processing successful analysis for attempt id: {} type : {}", dto.getAttemptId(), dto.getMessageType());
+            log.info("Processing successful analysis for attempt id: {} type : {} \n content : {}", dto.getAttemptId(), dto.getMessageType(), dto.getContent());
         });
     }
 }
