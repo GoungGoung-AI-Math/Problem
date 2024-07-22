@@ -10,6 +10,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -38,11 +39,8 @@ public class Review {
     @Column
     private String title;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String content;
-
-    @Column
-    private Boolean isSuccess;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -52,4 +50,14 @@ public class Review {
     @JoinColumn(name = "review_id")
     private Set<ReviewContent> reviewContents;
 
+    public static Review aiAnalysis(String content) {
+        // content에서 앞 15글자를 추출하여 title 변수에 저장합니다.
+        String title = content.length() > 15 ? content.substring(0, 15) : content;
+        return Review.builder()
+                .createDate(LocalDateTime.now())
+                .content(content)
+                .title(title)
+                .reviewerType(ReviewerType.AI)
+                .build();
+    }
 }

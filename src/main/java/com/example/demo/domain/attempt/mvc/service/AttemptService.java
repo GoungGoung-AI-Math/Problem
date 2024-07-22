@@ -13,6 +13,8 @@ import com.example.demo.domain.attempt.mvc.repository.AttemptRepository;
 import com.example.demo.domain.problem.entity.Problem;
 import com.example.demo.domain.problem.exception.ProblemException;
 import com.example.demo.domain.problem.repository.ProblemRepository;
+import com.example.demo.domain.review.entity.Review;
+import com.example.demo.domain.review.repository.ReviewRepository;
 import com.example.demo.my.kafka.infra.kafka.dtos.AnalysisType;
 import com.example.demo.my.kafka.infra.kafka.dtos.MessageType;
 import com.example.demo.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisRequestDto;
@@ -23,6 +25,7 @@ import org.apache.kafka.common.KafkaException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +35,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class AttemptService {
-
+    private final ReviewRepository reviewRepository;
     private final ProblemRepository problemRepository;
     private final AttemptRepository attemptRepository;
     private final AttemptAnalysisRequestPublisher attemptAnalysisRequestPublisher;
@@ -73,6 +76,12 @@ public class AttemptService {
                 .build();
     }
 
+    @Transactional
+    public void saveAttemptAnalysis(AttemptAnalysisResponseDto dto) {
+        Review review = Review.aiAnalysis(dto.getContent());
+        reviewRepository.save(review);
+    }
+
     private void analysisRequest(AttemptMarkRequest attempt, Long attemptId) {
         List<String> content;
         MessageType messageType;
@@ -104,9 +113,5 @@ public class AttemptService {
         event.fire();
     }
 
-    @Transactional
-    public void saveAttemptAnalysis(AttemptAnalysisResponseDto dto) {
 
-
-    }
 }
