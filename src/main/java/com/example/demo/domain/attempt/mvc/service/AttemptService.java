@@ -1,11 +1,11 @@
-package com.example.demo.domain.attempt.service;
+package com.example.demo.domain.attempt.mvc.service;
 
-import com.example.demo.domain.attempt.dto.AttemptMarkRequest;
-import com.example.demo.domain.attempt.dto.SimpleMarkResponse;
-import com.example.demo.domain.attempt.entity.ProblemAttempt;
-import com.example.demo.domain.attempt.entity.Status;
+import com.example.demo.domain.attempt.mvc.dto.AttemptMarkRequest;
+import com.example.demo.domain.attempt.mvc.dto.SimpleMarkResponse;
+import com.example.demo.domain.attempt.mvc.entity.ProblemAttempt;
+import com.example.demo.domain.attempt.mvc.entity.Status;
 import com.example.demo.domain.attempt.exception.AttemptException;
-import com.example.demo.domain.attempt.repository.AttemptRepository;
+import com.example.demo.domain.attempt.mvc.repository.AttemptRepository;
 import com.example.demo.domain.gpt.exception.GptAsyncException;
 import com.example.demo.domain.gpt.service.GptAsyncService;
 import com.example.demo.domain.problem.entity.Problem;

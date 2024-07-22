@@ -1,4 +1,4 @@
-package com.example.demo.domain.attempt.entity;
+package com.example.demo.domain.attempt.mvc.entity;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 

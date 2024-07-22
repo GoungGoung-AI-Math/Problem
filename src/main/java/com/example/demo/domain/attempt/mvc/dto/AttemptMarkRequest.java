@@ -1,7 +1,7 @@
-package com.example.demo.domain.attempt.dto;
+package com.example.demo.domain.attempt.mvc.dto;
 
 import com.example.demo.common.dto.ContentRequest;
-import com.example.demo.domain.attempt.entity.AttemptType;
+import com.example.demo.domain.attempt.mvc.entity.AttemptType;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;

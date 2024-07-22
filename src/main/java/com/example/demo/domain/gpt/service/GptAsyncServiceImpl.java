@@ -1,6 +1,6 @@
 package com.example.demo.domain.gpt.service;
 
-import com.example.demo.domain.attempt.event.AttemptAnalysisDto;
+import com.example.demo.domain.attempt.kafka.event.AttemptAnalysisDto;
 import com.example.demo.domain.gpt.dto.VisionReqDto;
 import org.springframework.stereotype.Service;
 

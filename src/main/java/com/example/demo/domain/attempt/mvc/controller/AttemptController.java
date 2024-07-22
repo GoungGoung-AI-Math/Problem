@@ -1,8 +1,8 @@
-package com.example.demo.domain.attempt.controller;
+package com.example.demo.domain.attempt.mvc.controller;
 
-import com.example.demo.domain.attempt.dto.AttemptMarkRequest;
-import com.example.demo.domain.attempt.dto.SimpleMarkResponse;
-import com.example.demo.domain.attempt.service.AttemptService;
+import com.example.demo.domain.attempt.mvc.dto.AttemptMarkRequest;
+import com.example.demo.domain.attempt.mvc.dto.SimpleMarkResponse;
+import com.example.demo.domain.attempt.mvc.service.AttemptService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

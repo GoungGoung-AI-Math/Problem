@@ -1,7 +1,7 @@
-package com.example.demo.domain.attempt.entity;
+package com.example.demo.domain.attempt.mvc.entity;
 
 import com.example.demo.common.dto.ContentRequest;
-import com.example.demo.domain.attempt.dto.AttemptMarkRequest;
+import com.example.demo.domain.attempt.mvc.dto.AttemptMarkRequest;
 import com.example.demo.domain.problem.entity.Problem;
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,20 +1,20 @@
-package com.example.demo.domain.attempt.event;
+package com.example.demo.domain.attempt.mvc.dto;
 
-import com.example.demo.common.AnalysisType;
-import com.example.demo.domain.gpt.dto.MessageType;
+import com.example.demo.domain.attempt.mvc.entity.Status;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class AttemptAnalysisDto {
+public class SimpleMarkResponse {
     private Long attemptId;
-    private AnalysisType analysisType;
-    private MessageType messageType;
-    private String content;
+    private Long problemId;
+    private Status status;
 }
