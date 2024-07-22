@@ -1,6 +1,6 @@
 package com.example.demo.kafka.mapper;
 
-import com.example.demo.domain.attempt.dto.AttemptAnalysisDto;
+import com.example.demo.domain.attempt.event.AttemptAnalysisDto;
 import com.example.demo.my.kafka.infra.avrobuild.AnalysisType;
 import com.example.demo.my.kafka.infra.avrobuild.AttemptAnalysisRequestAvroModel;
 import com.example.demo.my.kafka.infra.avrobuild.AttemptAnalysisResponseAvroModel;

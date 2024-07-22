@@ -1,4 +1,4 @@
-package com.example.demo.domain.attempt.dto;
+package com.example.demo.domain.attempt.event;
 
 import com.example.demo.common.AnalysisType;
 import com.example.demo.domain.gpt.dto.MessageType;

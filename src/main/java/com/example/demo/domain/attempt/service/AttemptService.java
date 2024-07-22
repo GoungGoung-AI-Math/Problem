@@ -1,6 +1,5 @@
 package com.example.demo.domain.attempt.service;
 
-import com.example.demo.domain.attempt.AttemptMarkGPTMapper;
 import com.example.demo.domain.attempt.dto.AttemptMarkRequest;
 import com.example.demo.domain.attempt.dto.SimpleMarkResponse;
 import com.example.demo.domain.attempt.entity.ProblemAttempt;
@@ -48,7 +47,8 @@ public class AttemptService {
 
         if (status == Status.PENDING) {
             try {
-                gptAsyncService.attemptMarkRequest(AttemptMarkGPTMapper.mapTo(attempt, savedProblemAttempt.getId()));
+//                gptAsyncService.attemptMarkRequest(AttemptMarkGPTMapper.mapTo(attempt, savedProblemAttempt.getId()));
+                log.info("나중에 publisher 로 gpt에게 attempt를 분석 요청!");
             } catch (RuntimeException e) {
                 throw new GptAsyncException("GPT 분석 요청 중 오류가 발생했습니다.", e);
             }

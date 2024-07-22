@@ -1,6 +1,6 @@
 package com.example.demo.kafka.listener;
 
-import com.example.demo.domain.attempt.dto.AttemptAnalysisDto;
+import com.example.demo.domain.attempt.event.AttemptAnalysisDto;
 import com.example.demo.kafka.mapper.AttemptAnalysisDataMapper;
 import com.example.demo.my.kafka.infra.avrobuild.AttemptAnalysisResponseAvroModel;
 import lombok.RequiredArgsConstructor;
