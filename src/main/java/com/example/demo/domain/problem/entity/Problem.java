@@ -1,5 +1,7 @@
 package com.example.demo.domain.problem.entity;
 
+import com.example.demo.domain.exam.entity.Difficulty;
+import com.example.demo.domain.exam.entity.Exam;
 import com.example.demo.domain.problem.dto.ProblemCreationRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -41,12 +43,17 @@ public class Problem {
     private String imgUrl;
 
     @Column
-    private Double difficulty;
+    private Difficulty difficulty;
+
+    @ManyToOne
+    @JoinColumn(name = "exam_id")
+    private Exam exam;
 
     @Getter
     @Column
     private Integer answer;
 
+    @Getter
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "problem_id")
     private Set<ProblemConceptTag> problemConceptTags;

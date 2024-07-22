@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProblemRepository extends JpaRepository<Problem, Long> {
+public interface ProblemRepository extends JpaRepository<Problem, Long>, ProblemRepositoryCustom {
 
     @Query(value = "Select p.answer FROM Problem p WHERE p.id = :id")
     Integer findAnswerById(@Param("id") Long id);

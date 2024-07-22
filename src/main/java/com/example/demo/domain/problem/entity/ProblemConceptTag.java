@@ -1,10 +1,7 @@
 package com.example.demo.domain.problem.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Builder
@@ -16,6 +13,7 @@ public class ProblemConceptTag {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Setter
     @ManyToOne
     @JoinColumn(name = "problem_id")
     private Problem problem;
@@ -23,5 +21,4 @@ public class ProblemConceptTag {
     @ManyToOne
     @JoinColumn(name = "concep_tag_id")
     private ConceptTag conceptTag;
-
 }
