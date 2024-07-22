@@ -25,7 +25,7 @@ public class AttemptAnalysisKafkaListener implements KafkaConsumer<AttemptAnalys
     @Override
     @KafkaListener(id = "${kafka-consumer.attempt-analysis-consumer-group-id}", topics = "${problem-service.attempt-analysis-response-topic-name}")
     public void receive(@Payload List<AttemptAnalysisResponseAvroModel> messages,
-                        @Header(KafkaHeaders.RECEIVED) List<String> keys,
+                        @Header(KafkaHeaders.RECEIVED_KEY) List<String> keys,
                         @Header(KafkaHeaders.RECEIVED_PARTITION) List<Integer> partitions,
                         @Header(KafkaHeaders.OFFSET) List<Long> offsets) {
         log.info("{} number of analysis responses received with keys:{}, partitions:{} and offsets: {}",
