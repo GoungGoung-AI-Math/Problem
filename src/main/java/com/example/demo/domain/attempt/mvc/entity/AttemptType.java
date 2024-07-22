@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum AttemptType {
     TEXT("text"),
-    IMAGE_URL("url");
+    IMAGE_URL("image_url");
 
     private final String type;
     AttemptType(String type){

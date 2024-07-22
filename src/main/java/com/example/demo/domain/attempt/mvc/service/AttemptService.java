@@ -13,6 +13,7 @@ import com.example.demo.domain.attempt.mvc.repository.AttemptRepository;
 import com.example.demo.domain.problem.entity.Problem;
 import com.example.demo.domain.problem.exception.ProblemException;
 import com.example.demo.domain.problem.repository.ProblemRepository;
+import com.example.demo.my.kafka.infra.kafka.dtos.AnalysisType;
 import com.example.demo.my.kafka.infra.kafka.dtos.MessageType;
 import com.example.demo.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -74,9 +75,11 @@ public class AttemptService {
         List<String> content;
         MessageType messageType;
 
+        // 학생의 풀이가 Text인 경우
         if (attempt.getType() == AttemptType.TEXT) {
             content = Collections.singletonList(attempt.getTextContent());
             messageType = MessageType.TEXT;
+            // 학생의 풀이가 Image인 경우
         } else if (attempt.getType() == AttemptType.IMAGE_URL) {
             content = attempt.getImgUrlsContent().stream()
                     .map(ContentRequest::getImgUrl)
@@ -92,6 +95,7 @@ public class AttemptService {
                 .attemptAnalysisDto(AttemptAnalysisRequestDto.builder()
                         .attemptId(attemptId)
                         .content(content) // AttemptType에 따라 설정된 content
+                        .analysisType(AnalysisType.ATTEMPT)
                         .messageType(messageType) // AttemptType에 따라 설정된 messageType
                         .build())
                 .build();
