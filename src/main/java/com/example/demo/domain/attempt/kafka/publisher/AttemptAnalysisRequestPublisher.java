@@ -1,10 +1,9 @@
 package com.example.demo.domain.attempt.kafka.publisher;
 
-import com.example.demo.domain.attempt.kafka.event.AttemptAnalysisEvent;
-import com.example.demo.domain.attempt.kafka.mapper.AttemptAnalysisDataMapper;
+import com.example.demo.domain.attempt.kafka.event.AttemptAnalysisRequestEvent;
 import com.example.demo.my.kafka.infra.avrobuild.AttemptAnalysisRequestAvroModel;
-import com.example.demo.my.kafka.infra.avrobuild.AttemptAnalysisResponseAvroModel;
 import com.example.demo.my.kafka.infra.kafka.config.ProblemServiceKafkaConfigData;
+import com.example.demo.my.kafka.infra.kafka.mapper.AttemptAnalysisDataMapper;
 import com.example.demo.my.kafka.infra.kafka.producer.KafkaProducer;
 import com.example.demo.my.kafka.infra.kafka.publisher.kafka.DomainEventPublisher;
 import lombok.RequiredArgsConstructor;
@@ -14,15 +13,15 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class AttemptAnalysisRequestPublisher implements DomainEventPublisher<AttemptAnalysisEvent> {
+public class AttemptAnalysisRequestPublisher implements DomainEventPublisher<AttemptAnalysisRequestEvent> {
 
     private final AttemptAnalysisDataMapper attemptAnalysisDataMapper;
     private final KafkaProducer<String, AttemptAnalysisRequestAvroModel> kafkaProducer;
     private final ProblemServiceKafkaConfigData problemServiceKafkaConfigData;
     @Override
-    public void publish(AttemptAnalysisEvent domainEvent) {
+    public void publish(AttemptAnalysisRequestEvent domainEvent) {
         Long attemptId = domainEvent.getAttemptAnalysisDto().getAttemptId();
-        log.info("Received AttemptAnalysisEvent for attempt id: {}", attemptId);
+        log.info("Received AttemptAnalysisRequestEvent for attempt id: {}", attemptId);
         try {
             AttemptAnalysisRequestAvroModel attemptAnalysisRequestAvroModel =
                     attemptAnalysisDataMapper

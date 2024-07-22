@@ -1,10 +1,9 @@
 package com.example.demo.domain.attempt.kafka.listenser;
 
-import com.example.demo.domain.attempt.kafka.event.AttemptAnalysisDto;
-import com.example.demo.domain.attempt.kafka.event.AttemptAnalysisEvent;
-import com.example.demo.domain.attempt.kafka.mapper.AttemptAnalysisDataMapper;
 import com.example.demo.my.kafka.infra.avrobuild.AttemptAnalysisResponseAvroModel;
+import com.example.demo.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisResponseDto;
 import com.example.demo.my.kafka.infra.kafka.listener.kafka.KafkaConsumer;
+import com.example.demo.my.kafka.infra.kafka.mapper.AttemptAnalysisDataMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -18,7 +17,7 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class AttemptAnalysisKafkaListener implements KafkaConsumer<AttemptAnalysisResponseAvroModel> {
+public class AttemptAnalysisResponseKafkaListener implements KafkaConsumer<AttemptAnalysisResponseAvroModel> {
 
     private final AttemptAnalysisDataMapper attemptAnalysisDataMapper;
 
@@ -35,7 +34,7 @@ public class AttemptAnalysisKafkaListener implements KafkaConsumer<AttemptAnalys
                 offsets.toString());
 
         messages.forEach(avroModel -> {
-            AttemptAnalysisDto dto = attemptAnalysisDataMapper.avroModelToAttemptAnalysisDto(avroModel);
+            AttemptAnalysisResponseDto dto = attemptAnalysisDataMapper.avroModelToAttemptAnalysisResponseDto(avroModel);
             log.info("Processing successful analysis for attempt id: {} type : {}", dto.getAttemptId(), dto.getMessageType());
         });
     }

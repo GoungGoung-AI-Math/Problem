@@ -1,7 +1,7 @@
-package com.example.demo.domain.attempt.kafka.event;
+package com.example.demo.my.kafka.infra.kafka.dtos.attempt.analysis;
 
-import com.example.demo.common.AnalysisType;
-import com.example.demo.domain.gpt.dto.MessageType;
+import com.example.demo.my.kafka.infra.kafka.dtos.MessageType;
+import com.example.demo.my.kafka.infra.kafka.dtos.AnalysisType;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class AttemptAnalysisDto {
+public class AttemptAnalysisResponseDto {
     private Long attemptId;
     private AnalysisType analysisType;
     private MessageType messageType;

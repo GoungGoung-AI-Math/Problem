@@ -2,8 +2,8 @@ package com.example.demo.domain.attempt.mvc.controller;
 
 
 import com.example.demo.common.AnalysisType;
-import com.example.demo.domain.attempt.kafka.event.AttemptAnalysisDto;
-import com.example.demo.domain.attempt.kafka.event.AttemptAnalysisEvent;
+import com.example.demo.domain.attempt.kafka.event.AttemptAnalysisRequestDto;
+import com.example.demo.domain.attempt.kafka.event.AttemptAnalysisRequestEvent;
 import com.example.demo.domain.attempt.kafka.publisher.AttemptAnalysisRequestPublisher;
 import com.example.demo.domain.attempt.mvc.dto.AttemptMarkRequest;
 import com.example.demo.domain.attempt.mvc.dto.SimpleMarkResponse;
@@ -38,13 +38,13 @@ public class AttemptController {
 
     @PostMapping("/test-kafka")
     public void test(){
-        AttemptAnalysisDto dto = AttemptAnalysisDto.builder()
+        AttemptAnalysisRequestDto dto = AttemptAnalysisRequestDto.builder()
                 .analysisType(AnalysisType.ATTEMPT)
                 .messageType(MessageType.TEXT)
                 .attemptId(1L)
                 .content("테스트 가러 갑니다!!~ kafka야 동작해야!!")
                 .build();
-        AttemptAnalysisEvent event = AttemptAnalysisEvent.builder()
+        AttemptAnalysisRequestEvent event = AttemptAnalysisRequestEvent.builder()
                 .attemptAnalysisDto(dto)
                 .attemptAnalysisEventDomainEventPublisher(attemptAnalysisRequestPublisher)
                 .createdAt(ZonedDateTime.now())

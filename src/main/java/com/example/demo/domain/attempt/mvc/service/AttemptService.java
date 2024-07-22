@@ -1,5 +1,6 @@
 package com.example.demo.domain.attempt.mvc.service;
 
+import com.example.demo.domain.attempt.kafka.publisher.AttemptAnalysisRequestPublisher;
 import com.example.demo.domain.attempt.mvc.dto.AttemptMarkRequest;
 import com.example.demo.domain.attempt.mvc.dto.SimpleMarkResponse;
 import com.example.demo.domain.attempt.mvc.entity.ProblemAttempt;
@@ -22,7 +23,7 @@ public class AttemptService {
 
     private final ProblemRepository problemRepository;
     private final AttemptRepository attemptRepository;
-    private final GptAsyncService gptAsyncService;
+    private final AttemptAnalysisRequestPublisher attemptAnalysisRequestPublisher;
 
     /**
      * 1. 답 체크

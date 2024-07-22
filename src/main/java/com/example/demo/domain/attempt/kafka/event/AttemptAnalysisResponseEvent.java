@@ -1,5 +1,6 @@
 package com.example.demo.domain.attempt.kafka.event;
 
+import com.example.demo.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisResponseDto;
 import com.example.demo.my.kafka.infra.kafka.publisher.kafka.DomainEvent;
 import com.example.demo.my.kafka.infra.kafka.publisher.kafka.DomainEventPublisher;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -15,11 +16,11 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class AttemptAnalysisEvent implements DomainEvent<AttemptAnalysisDto> {
-    private final AttemptAnalysisDto attemptAnalysisDto;
+public class AttemptAnalysisResponseEvent implements DomainEvent<AttemptAnalysisResponseDto> {
+    private final AttemptAnalysisResponseDto attemptAnalysisDto;
     private final List<String> failureMessages;
     private final ZonedDateTime createdAt;
-    private final DomainEventPublisher<AttemptAnalysisEvent> attemptAnalysisEventDomainEventPublisher;
+    private final DomainEventPublisher<AttemptAnalysisResponseEvent> attemptAnalysisEventDomainEventPublisher;
 
     @Override
     public void fire() {
