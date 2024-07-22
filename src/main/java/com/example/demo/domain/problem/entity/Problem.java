@@ -3,6 +3,7 @@ package com.example.demo.domain.problem.entity;
 import com.example.demo.domain.exam.entity.Difficulty;
 import com.example.demo.domain.exam.entity.Exam;
 import com.example.demo.domain.problem.dto.ProblemCreationRequest;
+import com.example.demo.domain.review.entity.ReviewContent;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,6 +40,7 @@ public class Problem {
     @Column
     private String name;
 
+    @Getter
     @Column(name = "img_url")
     private String imgUrl;
 

@@ -53,7 +53,7 @@ public class AttemptService {
                 .orElseThrow(() -> new ProblemException("존재하지 않는 문제입니다."));
         Status status = problem.getAnswer().equals(attempt.getAnswer()) ? Status.PENDING : Status.FAIL;
         ProblemAttempt problemAttempt = ProblemAttempt.toEntity(attempt, problem, status);
-
+        String problemImgUrl = problem.getImgUrl();
         ProblemAttempt savedProblemAttempt;
         try {
             savedProblemAttempt = attemptRepository.save(problemAttempt);
@@ -63,7 +63,7 @@ public class AttemptService {
 
         if (status == Status.PENDING) {
             try {
-                analysisRequest(attempt, savedProblemAttempt.getId());
+                analysisRequest(attempt, savedProblemAttempt.getId(), problemImgUrl);
                 log.info("나중에 publisher 로 gpt에게 attempt를 분석 요청!");
             } catch (RuntimeException e) {
                 throw new KafkaException("GPT 분석 요청 중 오류가 발생했습니다.", e);
@@ -82,7 +82,7 @@ public class AttemptService {
         reviewRepository.save(review);
     }
 
-    private void analysisRequest(AttemptMarkRequest attempt, Long attemptId) {
+    private void analysisRequest(AttemptMarkRequest attempt, Long attemptId, String problemImgUrl) {
         List<String> content;
         MessageType messageType;
 
