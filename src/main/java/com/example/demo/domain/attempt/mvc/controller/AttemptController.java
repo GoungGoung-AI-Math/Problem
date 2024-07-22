@@ -36,20 +36,19 @@ public class AttemptController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/test-kafka")
-    public void test(){
-        AttemptAnalysisRequestDto dto = AttemptAnalysisRequestDto.builder()
-                .analysisType(AnalysisType.ATTEMPT)
-                .messageType(MessageType.TEXT)
-                .attemptId(1L)
-                .content(List.of("테스트 가러 갑니다!!~ kafka야 동작해야!!"))
-                .build();
-        AttemptAnalysisRequestEvent event = AttemptAnalysisRequestEvent.builder()
-                .attemptAnalysisDto(dto)
-                .attemptAnalysisEventDomainEventPublisher(attemptAnalysisRequestPublisher)
-                .createdAt(ZonedDateTime.now())
-                .failureMessages(List.of())
-                .build();
-        event.fire();
-    }
+//    @PostMapping("/test-kafka")
+//    public void test(){
+//        AttemptAnalysisRequestDto dto = AttemptAnalysisRequestDto.builder()
+//                .analysisType(AnalysisType.ATTEMPT)
+//                .attemptId(1L)
+//                .content(List.of("테스트 가러 갑니다!!~ kafka야 동작해야!!"))
+//                .build();
+//        AttemptAnalysisRequestEvent event = AttemptAnalysisRequestEvent.builder()
+//                .attemptAnalysisDto(dto)
+//                .attemptAnalysisEventDomainEventPublisher(attemptAnalysisRequestPublisher)
+//                .createdAt(ZonedDateTime.now())
+//                .failureMessages(List.of())
+//                .build();
+//        event.fire();
+//    }
 }
