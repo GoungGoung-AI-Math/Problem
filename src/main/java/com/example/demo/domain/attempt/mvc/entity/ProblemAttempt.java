@@ -36,6 +36,7 @@ public class ProblemAttempt{
     @LastModifiedDate
     private LocalDateTime updatedDate;
 
+    @Getter
     @ManyToOne
     @JoinColumn(name = "problem_id", nullable = false)
     private Problem problem;
@@ -48,6 +49,7 @@ public class ProblemAttempt{
     @Column
     private Status status;
 
+    @Getter
     @Column(name = "user_id")
     private Long userId;
 

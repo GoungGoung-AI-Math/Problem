@@ -4,6 +4,7 @@ import com.example.demo.domain.attempt.kafka.event.AttemptAnalysisRequestEvent;
 import com.example.demo.domain.attempt.kafka.publisher.AttemptAnalysisRequestPublisher;
 import com.example.demo.domain.attempt.mvc.dto.AttemptMarkRequest;
 import com.example.demo.domain.attempt.mvc.dto.SimpleMarkResponse;
+import com.example.demo.domain.attempt.mvc.dto.UserUpdateMessage;
 import com.example.demo.domain.attempt.mvc.entity.AttemptType;
 import com.example.demo.domain.attempt.mvc.entity.ProblemAttempt;
 import com.example.demo.domain.attempt.mvc.entity.Status;
@@ -24,6 +25,7 @@ import com.example.demo.my.kafka.infra.kafka.dtos.attempt.analysis.ContentDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.KafkaException;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +42,7 @@ public class AttemptService {
     private final ProblemRepository problemRepository;
     private final AttemptRepository attemptRepository;
     private final AttemptAnalysisRequestPublisher attemptAnalysisRequestPublisher;
+    private final KafkaTemplate<String, UserUpdateMessage> kafkaTemplate;
 
     /**
      * 1. 답 체크
@@ -74,10 +77,21 @@ public class AttemptService {
                 throw new KafkaException("GPT 분석 요청 중 오류가 발생했습니다.", e);
             }
         }
+
+        kafkaTemplate.send("user-update-topic", createUserUpdateMessage(savedProblemAttempt, status));
+
         return SimpleMarkResponse.builder()
                 .attemptId(savedProblemAttempt.getId())
                 .problemId(savedProblemAttempt.getId())
                 .status(savedProblemAttempt.getStatus())
+                .build();
+    }
+
+    private UserUpdateMessage createUserUpdateMessage(ProblemAttempt problemAttempt, Status status) {
+        return UserUpdateMessage.builder()
+                .userId(problemAttempt.getUserId())
+                .problemId(problemAttempt.getProblem().getId())
+                .status(status.getStatus())
                 .build();
     }
 
