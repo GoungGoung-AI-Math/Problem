@@ -1,4 +1,4 @@
-package com.example.demo.domain.question;
+package com.example.demo.domain.question.mvc.entity;
 
 import com.example.demo.domain.problem.entity.Problem;
 import jakarta.persistence.*;
