@@ -1,10 +1,7 @@
 package com.example.demo.domain.problem.service;
 
 import com.example.demo.domain.problem.dto.*;
-import com.example.demo.domain.problem.entity.ConceptTag;
-import com.example.demo.domain.problem.entity.OfficialSolution;
-import com.example.demo.domain.problem.entity.Problem;
-import com.example.demo.domain.problem.entity.ProblemConceptTag;
+import com.example.demo.domain.problem.entity.*;
 import com.example.demo.domain.problem.exception.InvalidConceptTagException;
 import com.example.demo.domain.problem.exception.ProblemException;
 import com.example.demo.domain.problem.repository.ConceptTagRepository;
@@ -17,6 +14,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -43,6 +41,8 @@ public class ProblemService {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public ProblemCreationResponse createProblem(ProblemCreationRequest request){
         OfficialSolution officialSolution = OfficialSolution.toEntity(request.getOfficialSolution());
+        Set<SolutionContentEntity> solutionContentEntitySet = SolutionContentEntity.toEntity(officialSolution, request.getOfficialSolution().getImgSolutions());
+        officialSolution.setSolutionContents(solutionContentEntitySet);
 
         Problem problem = Problem.toEntity(request, officialSolution);
         Problem savedProblem = problemRepository.save(problem);

@@ -31,6 +31,7 @@ public class OfficialSolution{
     @LastModifiedDate
     private LocalDateTime updatedDate;
 
+    @Getter
     @Column(name = "text_solution")
     private String textSolution;
 
@@ -40,22 +41,22 @@ public class OfficialSolution{
     @Column
     private String source;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @Getter
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "official_solution_id")
     private Set<SolutionContentEntity> solutionContents;
 
     public static OfficialSolution toEntity(OfficialSolutionCreationRequest request) {
 
         return OfficialSolution.builder()
+                .createDate(LocalDateTime.now())
                 .textSolution(request.getTextSolution())
                 .source(request.getSource())
-                .solutionContents(toEntity(request.getImgSolutions()))
                 .build();
     }
-
-    private static Set<SolutionContentEntity> toEntity(List<ContentRequest> requests){
-        return requests.parallelStream().map( req -> SolutionContentEntity.builder()
-                                                    .imgUrl(req.getImgUrl()).build())
-                .collect(Collectors.toSet());
+    public void setSolutionContents(Set<SolutionContentEntity> entitySet){
+        this.solutionContents = entitySet;
     }
+
+
 }

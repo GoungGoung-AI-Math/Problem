@@ -3,6 +3,7 @@ package com.example.demo.domain.problem.entity;
 import com.example.demo.domain.exam.entity.Difficulty;
 import com.example.demo.domain.exam.entity.Exam;
 import com.example.demo.domain.problem.dto.ProblemCreationRequest;
+import com.example.demo.domain.review.entity.ReviewContent;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +19,7 @@ import java.util.Set;
 @Builder
 @Table(name = "problem")
 @AllArgsConstructor
-@NoArgsConstructor()
+@NoArgsConstructor
 public class Problem {
     @Id
     @Getter
@@ -39,6 +40,7 @@ public class Problem {
     @Column
     private String name;
 
+    @Getter
     @Column(name = "img_url")
     private String imgUrl;
 
@@ -58,6 +60,7 @@ public class Problem {
     @JoinColumn(name = "problem_id")
     private Set<ProblemConceptTag> problemConceptTags;
 
+    @Getter
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "official_solution_id")
     private OfficialSolution officialSolution;
@@ -71,6 +74,7 @@ public class Problem {
                 .difficulty(request.getDifficulty())
                 .answer(request.getAnswer())
                 .officialSolution(solution)
+                .createDate(LocalDateTime.now())
                 .build();
     }
 }

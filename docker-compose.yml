@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  postgresql_problem:
+    image: postgres:13
+    container_name: postgresql_problem
+    environment:
+      POSTGRES_DB: springdb_problem
+      POSTGRES_USER: springproblem
+      POSTGRES_PASSWORD: abcd1234
+    volumes:
+      - ./postgres_data_problem:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+
+volumes:
+  postgres_data_problem:
+  springboot_problem_keystore:
