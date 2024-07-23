@@ -111,7 +111,7 @@ public class AttemptService {
             attempt.getImgUrlsContent().forEach(imgUrl ->
                     contents.add(new ContentDto(MessageType.IMAGE_URL, imgUrl.getImgUrl())));
         } else {
-            throw new IllegalArgumentException("Unsupported AttemptType: " + attempt.getType());
+            throw new IllegalArgumentException("Unsupported ContentType: " + attempt.getType());
         }
 
         AttemptAnalysisRequestEvent event = AttemptAnalysisRequestEvent.builder()
