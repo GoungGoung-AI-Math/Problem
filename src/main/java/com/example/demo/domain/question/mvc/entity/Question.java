@@ -1,5 +1,6 @@
 package com.example.demo.domain.question.mvc.entity;
 
+import com.example.demo.domain.problem.entity.OfficialSolution;
 import com.example.demo.domain.problem.entity.Problem;
 import jakarta.persistence.*;
 import lombok.*;
@@ -41,7 +42,12 @@ public class Question {
     @Column(name = "user_id")
     private Long userId;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id")
     private Set<Answer> answers;
+
+    @Getter
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "question_id")
+    private Set<QuestionContentEntity> questionContentEntities;
 }
