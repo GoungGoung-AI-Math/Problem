@@ -54,7 +54,7 @@ public class Question {
     @JoinColumn(name = "question_id")
     private Set<QuestionContentEntity> questionContentEntities;
 
-    public static Question toEntity(QuestionCreateRequest questionCreateRequest) {
+    public static Question toEntity(QuestionCreateRequest questionCreateRequest, Problem problem) {
         Set<QuestionContentEntity> contentEntities = questionCreateRequest.getContents().stream()
                 .filter(qc -> qc.getType().equals(ContentType.IMAGE_URL))
                 .map(qc -> QuestionContentEntity.builder().imgUrl(qc.getContent()).build()).collect(Collectors.toSet());
@@ -64,6 +64,7 @@ public class Question {
         String textContent = sb.toString();
 
         return Question.builder()
+                .problem(problem)
                 .userId(questionCreateRequest.getUserId())
                 .createDate(LocalDateTime.now())
                 .title(questionCreateRequest.getTitle())
