@@ -1,10 +1,11 @@
 package com.example.demo.domain.attempt.mvc.service;
 
 import com.example.demo.domain.attempt.kafka.event.AttemptAnalysisRequestEvent;
+import com.example.demo.domain.attempt.kafka.event.UserUpdateEvent;
 import com.example.demo.domain.attempt.kafka.publisher.AttemptAnalysisRequestPublisher;
+import com.example.demo.domain.attempt.kafka.publisher.UserUpdateEventPublisher;
 import com.example.demo.domain.attempt.mvc.dto.AttemptMarkRequest;
 import com.example.demo.domain.attempt.mvc.dto.SimpleMarkResponse;
-import com.example.demo.domain.attempt.mvc.dto.UserUpdateMessage;
 import com.example.demo.domain.attempt.mvc.entity.AttemptType;
 import com.example.demo.domain.attempt.mvc.entity.ProblemAttempt;
 import com.example.demo.domain.attempt.mvc.entity.Status;
@@ -12,7 +13,6 @@ import com.example.demo.domain.attempt.exception.AttemptException;
 import com.example.demo.domain.attempt.mvc.repository.AttemptRepository;
 import com.example.demo.domain.problem.entity.OfficialSolution;
 import com.example.demo.domain.problem.entity.Problem;
-import com.example.demo.domain.problem.entity.SolutionContentEntity;
 import com.example.demo.domain.problem.exception.ProblemException;
 import com.example.demo.domain.problem.repository.ProblemRepository;
 import com.example.demo.domain.review.entity.Review;
@@ -22,17 +22,17 @@ import com.example.demo.my.kafka.infra.kafka.dtos.MessageType;
 import com.example.demo.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisRequestDto;
 import com.example.demo.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisResponseDto;
 import com.example.demo.my.kafka.infra.kafka.dtos.attempt.analysis.ContentDto;
+import com.example.demo.my.kafka.infra.kafka.publisher.kafka.DomainEventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.KafkaException;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 @Slf4j
 @Service
@@ -42,7 +42,7 @@ public class AttemptService {
     private final ProblemRepository problemRepository;
     private final AttemptRepository attemptRepository;
     private final AttemptAnalysisRequestPublisher attemptAnalysisRequestPublisher;
-    private final KafkaTemplate<String, UserUpdateMessage> kafkaTemplate;
+    private final UserUpdateEventPublisher userUpdateEventPublisher;
 
     /**
      * 1. 답 체크
@@ -78,20 +78,26 @@ public class AttemptService {
             }
         }
 
-        kafkaTemplate.send("user-update-topic", createUserUpdateMessage(savedProblemAttempt, status));
+        com.example.demo.avro.UserUpdateMessage userUpdateMessage = com.example.demo.avro.UserUpdateMessage.newBuilder()
+                .setUserId(attempt.getUserId())
+                .setProblemId(savedProblemAttempt.getProblem().getId())
+                .setStatus(savedProblemAttempt.getStatus().toString())
+                .build();
+
+        UserUpdateEvent userUpdateEvent = UserUpdateEvent.builder()
+                .userUpdateMessage(userUpdateMessage)
+                .failureMessages(Collections.emptyList())
+                .createdAt(ZonedDateTime.now())
+                .userUpdateEventDomainEventPublisher(userUpdateEventPublisher)
+                .build();
+
+        userUpdateEvent.fire();
+
 
         return SimpleMarkResponse.builder()
                 .attemptId(savedProblemAttempt.getId())
                 .problemId(savedProblemAttempt.getId())
                 .status(savedProblemAttempt.getStatus())
-                .build();
-    }
-
-    private UserUpdateMessage createUserUpdateMessage(ProblemAttempt problemAttempt, Status status) {
-        return UserUpdateMessage.builder()
-                .userId(problemAttempt.getUserId())
-                .problemId(problemAttempt.getProblem().getId())
-                .status(status.getStatus())
                 .build();
     }
 
@@ -139,6 +145,4 @@ public class AttemptService {
                 .build();
         event.fire();
     }
-
-
 }
