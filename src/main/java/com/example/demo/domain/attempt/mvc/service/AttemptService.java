@@ -2,6 +2,7 @@ package com.example.demo.domain.attempt.mvc.service;
 
 import com.example.demo.domain.attempt.kafka.event.AttemptAnalysisRequestEvent;
 import com.example.demo.domain.attempt.kafka.publisher.AttemptAnalysisRequestPublisher;
+import com.example.demo.domain.attempt.kafka.publisher.UserUpdateEventPublisher;
 import com.example.demo.domain.attempt.mvc.dto.AttemptMarkRequest;
 import com.example.demo.domain.attempt.mvc.dto.SimpleMarkResponse;
 import com.example.demo.domain.attempt.mvc.entity.AttemptType;
@@ -40,6 +41,7 @@ public class AttemptService {
     private final ProblemRepository problemRepository;
     private final AttemptRepository attemptRepository;
     private final AttemptAnalysisRequestPublisher attemptAnalysisRequestPublisher;
+    private final UserUpdateEventPublisher userUpdateEventPublisher;
 
     /**
      * 1. 답 체크
@@ -74,6 +76,16 @@ public class AttemptService {
                 throw new KafkaException("GPT 분석 요청 중 오류가 발생했습니다.", e);
             }
         }
+
+        // 유저 정보 업데이트 이벤트 생성 및 퍼블리싱
+        com.example.demo.avro.UserUpdateEvent userUpdateEvent = com.example.demo.avro.UserUpdateEvent.newBuilder()
+                .setUserId(attempt.getUserId())
+                .setProblemId(savedProblemAttempt.getProblem().getId())
+                .setStatus(savedProblemAttempt.getStatus().toString())
+                .build();
+
+        userUpdateEventPublisher.publish("user-update-topic", userUpdateEvent);
+
         return SimpleMarkResponse.builder()
                 .attemptId(savedProblemAttempt.getId())
                 .problemId(savedProblemAttempt.getId())
