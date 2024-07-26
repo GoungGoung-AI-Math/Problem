@@ -3,12 +3,15 @@ package com.example.demo.domain.exam.controller;
 import com.example.demo.domain.exam.dto.request.ExamSearchCondition;
 import com.example.demo.domain.exam.dto.response.SearchExamResponse;
 import com.example.demo.domain.exam.service.ExamService;
+import com.example.demo.domain.problem.dto.response.ProblemResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -24,4 +27,6 @@ public class ExamController {
         Page<SearchExamResponse> results = examService.searchExams(condition, pageable);
         return ResponseEntity.ok(results);
     }
+
+
 }
