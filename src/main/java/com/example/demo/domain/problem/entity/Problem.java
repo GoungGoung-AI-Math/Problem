@@ -45,6 +45,7 @@ public class Problem {
     private String imgUrl;
 
     @Column
+    @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
 
     @ManyToOne

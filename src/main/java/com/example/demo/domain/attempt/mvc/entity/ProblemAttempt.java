@@ -36,6 +36,7 @@ public class ProblemAttempt{
     @LastModifiedDate
     private LocalDateTime updatedDate;
 
+    @Getter
     @ManyToOne
     @JoinColumn(name = "problem_id", nullable = false)
     private Problem problem;

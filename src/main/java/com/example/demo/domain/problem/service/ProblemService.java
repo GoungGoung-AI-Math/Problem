@@ -1,6 +1,7 @@
 package com.example.demo.domain.problem.service;
 
 import com.example.demo.domain.problem.dto.*;
+import com.example.demo.domain.problem.dto.response.ProblemResponse;
 import com.example.demo.domain.problem.entity.*;
 import com.example.demo.domain.problem.exception.InvalidConceptTagException;
 import com.example.demo.domain.problem.exception.ProblemException;
@@ -72,8 +73,10 @@ public class ProblemService {
         } catch (RuntimeException e){
             throw new ProblemException(e.getMessage(), e);
         }
+    }
 
-
+    public List<ProblemResponse> getProblems(Long examId) {
+        return problemRepository.findProblemsByExamId(examId);
     }
 
 }
