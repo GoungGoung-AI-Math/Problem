@@ -137,6 +137,4 @@ public class AttemptService {
                 .build();
         event.fire();
     }
-
-
 }
