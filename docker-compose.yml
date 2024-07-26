@@ -13,6 +13,25 @@ services:
     ports:
       - "5433:5432"
 
+  springboot_problem:
+    build: .
+    container_name: springboot_problem
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql_problem:5432/springdb_problem
+      SPRING_DATASOURCE_USERNAME: springproblem
+      SPRING_DATASOURCE_PASSWORD: password
+      SERVER_SSL_KEY_STORE: /app/key1.p12
+      SERVER_SSL_KEY_STORE_PASSWORD: abcd1234
+      SERVER_SSL_KEY_STORE_TYPE: PKCS12
+      SERVER_SSL_KEY_ALIAS: tomcat
+    volumes:
+        - ./key1.p12:/app/key1.p12
+    ports:
+      - "7070:8080"
+    depends_on:
+      - postgresql_problem
+
 volumes:
   postgres_data_problem:
   springboot_problem_keystore:
+
