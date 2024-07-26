@@ -18,9 +18,9 @@ public class ExamController {
 
     private final ExamService examService;
 
-    @GetMapping("/search")
+    @PostMapping("/search")
     public ResponseEntity<Page<SearchExamResponse>> searchExams(
-            ExamSearchCondition condition, Pageable pageable) {
+            @RequestBody ExamSearchCondition condition, Pageable pageable) {
         Page<SearchExamResponse> results = examService.searchExams(condition, pageable);
         return ResponseEntity.ok(results);
     }
