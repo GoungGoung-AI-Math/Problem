@@ -4,12 +4,15 @@ import com.example.demo.domain.problem.entity.Problem;
 import com.example.demo.domain.problem.exception.ProblemException;
 import com.example.demo.domain.problem.repository.ProblemRepository;
 import com.example.demo.domain.question.mvc.dto.QuestionCreateRequest;
+import com.example.demo.domain.question.mvc.dto.QuestionResponse;
 import com.example.demo.domain.question.mvc.entity.Question;
 import com.example.demo.domain.question.mvc.repository.QuestionRepository;
 import com.querydsl.core.QueryException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -27,5 +30,8 @@ public class QuestionService {
             log.error(e.getMessage(), e);
             throw new QueryException(e.getMessage(), e);
         }
+    }
+    public List<QuestionResponse> getQuestion(Long problemId) {
+        return questionRepository.findQuestionListByProblemId(problemId);
     }
 }
