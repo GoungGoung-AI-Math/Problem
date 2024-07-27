@@ -44,3 +44,5 @@ src/main/generated/**
 postgres_data_problem/**
 ## Avro build file
 src/main/java/com/example/demo/my/kafka/infra/avrobuild/**
+## application-local.properties
+src/main/resources/application-local.properties

@@ -1,13 +1,9 @@
 package com.example.demo.domain.like.kafka.publisher;
 
-import com.example.demo.domain.attempt.kafka.event.AttemptAnalysisRequestEvent;
 import com.example.demo.domain.like.kafka.event.LikeAddRequestEvent;
-import com.example.demo.my.kafka.infra.avrobuild.AttemptAnalysisRequestAvroModel;
+import com.example.demo.my.kafka.infra.avrobuild.DomainType;
 import com.example.demo.my.kafka.infra.avrobuild.LikeAddRequestAvroModel;
 import com.example.demo.my.kafka.infra.kafka.config.ProblemServiceKafkaConfigData;
-import com.example.demo.my.kafka.infra.kafka.dtos.like.add.LikeAddRequestDto;
-import com.example.demo.my.kafka.infra.kafka.mapper.AttemptAnalysisDataMapper;
-import com.example.demo.my.kafka.infra.kafka.mapper.LikeAddDataMapper;
 import com.example.demo.my.kafka.infra.kafka.producer.KafkaProducer;
 import com.example.demo.my.kafka.infra.kafka.publisher.kafka.DomainEventPublisher;
 import lombok.RequiredArgsConstructor;
@@ -18,27 +14,32 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class LikeAddRequestPublisher implements DomainEventPublisher<LikeAddRequestEvent> {
-    private final LikeAddDataMapper likeAddDataMapper;
     private final KafkaProducer<String, LikeAddRequestAvroModel> kafkaProducer;
     private final ProblemServiceKafkaConfigData problemServiceKafkaConfigData;
 
     @Override
     public void publish(LikeAddRequestEvent domainEvent) {
-        Long likeId = domainEvent.getLikeAddRequestDto().getLikeId();
-        log.info("Received AttemptAnalysisRequestEvent for attempt id: {}", likeId);
+        Long domainId = domainEvent.getLikeAddRequest().getDomainId();
+        log.info("Received LikeAddRequestEvent id: {} type : {}", domainId, domainEvent.getLikeAddRequest().getType());
         try {
-            LikeAddRequestAvroModel likeAddRequestAvroModel =
-                    likeAddDataMapper.likeAddRequestToAvroModel(domainEvent.getLikeAddRequestDto());
+            String key = domainEvent.getLikeAddRequest().getType()+String.valueOf(domainId);
+
+            LikeAddRequestAvroModel avroModel = LikeAddRequestAvroModel.newBuilder()
+                    .setDomainId(domainEvent.getLikeAddRequest().getDomainId())
+                    .setGiverId(domainEvent.getLikeAddRequest().getGiverId())
+                    .setReceiverId(domainEvent.getLikeAddRequest().getReceiverId())
+                    .setDomainType(DomainType.valueOf(domainEvent.getLikeAddRequest().getType().name()))
+                    .build();
 
             kafkaProducer.send(problemServiceKafkaConfigData.getLikeAddRequestTopicName(),
-                    String.valueOf(likeId),
-                    likeAddRequestAvroModel);
+                    key,
+                    avroModel);
 
             log.info("LikeAddRequestAvroModel sent to kafka at: {}", System.nanoTime());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             log.error("Error while sending LikeAddRequestAvroModel message" +
-                    " to kafka with order id: {}, error: {}", likeId, e.getMessage());
+                    " to kafka with domain id: {}, type: {} error: {}", domainId, domainEvent.getLikeAddRequest().getType(),e.getMessage());
         }
     }
 }
