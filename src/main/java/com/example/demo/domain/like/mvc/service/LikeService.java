@@ -46,7 +46,7 @@ public class LikeService {
     public void validDomainAddRequest(LikeAddRequest addRequest) {
         boolean valid;
         switch (addRequest.getType()){
-            case PROBLEM -> valid = likeRepository.exitsAnswerById(addRequest.getDomainId(), addRequest.getReceiverId());
+            case PROBLEM -> valid = likeRepository.exitsProblemById(addRequest.getDomainId(), addRequest.getReceiverId());
             case ATTEMPT -> valid = likeRepository.exitsAttemptById(addRequest.getDomainId() , addRequest.getReceiverId());
             case REVIEW -> valid = likeRepository.exitsReviewById(addRequest.getDomainId() , addRequest.getReceiverId());
             case QUESTION -> valid = likeRepository.exitsQuestionById(addRequest.getDomainId() , addRequest.getReceiverId());
