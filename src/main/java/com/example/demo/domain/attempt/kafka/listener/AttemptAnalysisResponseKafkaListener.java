@@ -1,4 +1,4 @@
-package com.example.demo.domain.attempt.kafka.listenser;
+package com.example.demo.domain.attempt.kafka.listener;
 
 import com.example.demo.domain.attempt.mvc.service.AttemptService;
 import com.example.demo.my.kafka.infra.avrobuild.AttemptAnalysisResponseAvroModel;
