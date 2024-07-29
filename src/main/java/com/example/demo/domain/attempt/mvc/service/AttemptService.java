@@ -22,6 +22,7 @@ import com.example.demo.my.kafka.infra.kafka.dtos.MessageType;
 import com.example.demo.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisRequestDto;
 import com.example.demo.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisResponseDto;
 import com.example.demo.my.kafka.infra.kafka.dtos.attempt.analysis.ContentDto;
+import com.example.demo.my.kafka.infra.kafka.producer.KafkaProducer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.KafkaException;
@@ -32,6 +33,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -42,6 +44,7 @@ public class AttemptService {
     private final AttemptRepository attemptRepository;
     private final AttemptAnalysisRequestPublisher attemptAnalysisRequestPublisher;
     private final UserUpdateEventPublisher userUpdateEventPublisher;
+    private final KafkaProducer<String, com.example.demo.avro.UserIdListAvro> kafkaProducer;
 
     /**
      * 1. 답 체크
@@ -136,5 +139,11 @@ public class AttemptService {
                         .build())
                 .build();
         event.fire();
+    }
+
+    public void requestUserNicknames(List<Long> userIds) {
+        String userIdList = userIds.stream().map(String::valueOf).collect(Collectors.joining(","));
+        com.example.demo.avro.UserIdListAvro userIdListAvro = new com.example.demo.avro.UserIdListAvro(userIdList);
+        kafkaProducer.send("user-id-list-topic", null, userIdListAvro);
     }
 }
