@@ -46,15 +46,15 @@ public class LikeService {
     public void validDomainAddRequest(LikeAddRequest addRequest) {
         boolean valid;
         switch (addRequest.getType()){
-            case PROBLEM -> valid = likeRepository.exitsProblemById(addRequest.getDomainId(), addRequest.getReceiverId());
-            case ATTEMPT -> valid = likeRepository.exitsAttemptById(addRequest.getDomainId() , addRequest.getReceiverId());
-            case REVIEW -> valid = likeRepository.exitsReviewById(addRequest.getDomainId() , addRequest.getReceiverId());
-            case QUESTION -> valid = likeRepository.exitsQuestionById(addRequest.getDomainId() , addRequest.getReceiverId());
-            case ANSWER -> valid = likeRepository.exitsAnswerById(addRequest.getDomainId() , addRequest.getReceiverId());
+            case PROBLEM -> valid = likeRepository.exitsProblemById(addRequest.getRelationId(), addRequest.getReceiverId());
+            case ATTEMPT -> valid = likeRepository.exitsAttemptById(addRequest.getRelationId() , addRequest.getReceiverId());
+            case REVIEW -> valid = likeRepository.exitsReviewById(addRequest.getRelationId() , addRequest.getReceiverId());
+            case QUESTION -> valid = likeRepository.exitsQuestionById(addRequest.getRelationId() , addRequest.getReceiverId());
+            case ANSWER -> valid = likeRepository.exitsAnswerById(addRequest.getRelationId() , addRequest.getReceiverId());
             default -> throw new LikeException("존재하지 않는 도메인 타입입니다.");
         }
         if(!valid){
-            throw new LikeException("type : "+addRequest.getType()+" "+" id : "+addRequest.getDomainId()+" 해당 데이터는 존재하지 않습니다.");
+            throw new LikeException("type : "+addRequest.getType()+" "+" id : "+addRequest.getRelationId()+" 해당 데이터는 존재하지 않습니다.");
         }
     }
 }

@@ -19,13 +19,13 @@ public class LikeAddRequestPublisher implements DomainEventPublisher<LikeAddRequ
 
     @Override
     public void publish(LikeAddRequestEvent domainEvent) {
-        Long domainId = domainEvent.getLikeAddRequest().getDomainId();
+        Long domainId = domainEvent.getLikeAddRequest().getRelationId();
         log.info("Received LikeAddRequestEvent id: {} type : {}", domainId, domainEvent.getLikeAddRequest().getType());
         try {
             String key = String.valueOf(domainId);
 
             LikeAddRequestAvroModel avroModel = LikeAddRequestAvroModel.newBuilder()
-                    .setDomainId(domainEvent.getLikeAddRequest().getDomainId())
+                    .setDomainId(domainEvent.getLikeAddRequest().getRelationId())
                     .setGiverId(domainEvent.getLikeAddRequest().getGiverId())
                     .setReceiverId(domainEvent.getLikeAddRequest().getReceiverId())
                     .setDomainType(DomainType.valueOf(domainEvent.getLikeAddRequest().getType().name()))
