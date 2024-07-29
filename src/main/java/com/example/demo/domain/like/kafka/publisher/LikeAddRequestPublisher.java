@@ -1,21 +1,18 @@
 package com.example.demo.domain.like.kafka.publisher;
 
 import com.example.demo.domain.like.kafka.event.LikeAddRequestEvent;
-import com.example.demo.my.kafka.infra.avrobuild.DomainType;
-import com.example.demo.my.kafka.infra.avrobuild.LikeAddRequestAvroModel;
-import com.example.demo.my.kafka.infra.kafka.config.ProblemServiceKafkaConfigData;
-import com.example.demo.my.kafka.infra.kafka.producer.KafkaProducer;
-import com.example.demo.my.kafka.infra.kafka.publisher.kafka.DomainEventPublisher;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.producer.KafkaProducer;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class LikeAddRequestPublisher implements DomainEventPublisher<LikeAddRequestEvent> {
+public class LikeAddRequestPublisher implements User.Math.AI.my.kafka.infra.kafka.publisher.kafka.DomainEventPublisher<LikeAddRequestEvent> {
     private final KafkaProducer<String, LikeAddRequestAvroModel> kafkaProducer;
-    private final ProblemServiceKafkaConfigData problemServiceKafkaConfigData;
+    private final User.Math.AI.my.kafka.infra.kafka.config.ProblemServiceKafkaConfigData problemServiceKafkaConfigData;
 
     @Override
     public void publish(LikeAddRequestEvent domainEvent) {
