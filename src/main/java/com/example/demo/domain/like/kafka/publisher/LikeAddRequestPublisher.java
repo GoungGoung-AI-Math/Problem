@@ -4,11 +4,11 @@ import com.example.demo.domain.like.kafka.event.LikeAddRequestEvent;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import temp.infra.avrobuild.math.ai.my.kafka.infra.avrobuild.LikeAddRequestAvroModel;
-import temp.infra.avrobuild.math.ai.my.kafka.infra.avrobuild.RelationType;
-import temp.infra.kafka.config.ProblemServiceKafkaConfigData;
-import temp.infra.kafka.producer.KafkaProducer;
-import temp.infra.kafka.publisher.kafka.DomainEventPublisher;
+import math.ai.my.kafka.infra.avrobuild.LikeAddRequestAvroModel;
+import math.ai.my.kafka.infra.avrobuild.RelationType;
+import math.ai.my.kafka.infra.kafka.config.ProblemServiceKafkaConfigData;
+import math.ai.my.kafka.infra.kafka.producer.KafkaProducer;
+import math.ai.my.kafka.infra.kafka.publisher.kafka.DomainEventPublisher;
 import org.springframework.stereotype.Component;
 
 @Slf4j
