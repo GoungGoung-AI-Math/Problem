@@ -1,11 +1,5 @@
 package com.example.demo.domain.attempt.mvc.service;
 
-import Math.AI.my.kafka.infra.avrobuild.Math.AI.my.kafka.infra.avrobuild.UserUpdateEvent;
-import Math.AI.my.kafka.infra.kafka.dtos.AnalysisType;
-import Math.AI.my.kafka.infra.kafka.dtos.MessageType;
-import Math.AI.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisRequestDto;
-import Math.AI.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisResponseDto;
-import Math.AI.my.kafka.infra.kafka.dtos.attempt.analysis.ContentDto;
 import com.example.demo.domain.attempt.kafka.event.AttemptAnalysisRequestEvent;
 import com.example.demo.domain.attempt.kafka.publisher.AttemptAnalysisRequestPublisher;
 import com.example.demo.domain.attempt.kafka.publisher.UserUpdateEventPublisher;
@@ -24,6 +18,12 @@ import com.example.demo.domain.review.entity.Review;
 import com.example.demo.domain.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import math.ai.my.kafka.infra.avrobuild.UserUpdateEvent;
+import math.ai.my.kafka.infra.kafka.dtos.AnalysisType;
+import math.ai.my.kafka.infra.kafka.dtos.MessageType;
+import math.ai.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisRequestDto;
+import math.ai.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisResponseDto;
+import math.ai.my.kafka.infra.kafka.dtos.attempt.analysis.ContentDto;
 import org.apache.kafka.common.KafkaException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

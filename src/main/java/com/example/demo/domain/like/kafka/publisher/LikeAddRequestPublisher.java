@@ -1,14 +1,14 @@
 package com.example.demo.domain.like.kafka.publisher;
 
-import Math.AI.my.kafka.infra.avrobuild.Math.AI.my.kafka.infra.avrobuild.LikeAddRequestAvroModel;
-import Math.AI.my.kafka.infra.avrobuild.Math.AI.my.kafka.infra.avrobuild.RelationType;
-import Math.AI.my.kafka.infra.kafka.config.ProblemServiceKafkaConfigData;
-import Math.AI.my.kafka.infra.kafka.producer.KafkaProducer;
-import Math.AI.my.kafka.infra.kafka.publisher.kafka.DomainEventPublisher;
 import com.example.demo.domain.like.kafka.event.LikeAddRequestEvent;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import math.ai.my.kafka.infra.avrobuild.LikeAddRequestAvroModel;
+import math.ai.my.kafka.infra.avrobuild.RelationType;
+import math.ai.my.kafka.infra.kafka.config.ProblemServiceKafkaConfigData;
+import math.ai.my.kafka.infra.kafka.producer.KafkaProducer;
+import math.ai.my.kafka.infra.kafka.publisher.kafka.DomainEventPublisher;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -23,7 +23,7 @@ public class LikeAddRequestPublisher implements DomainEventPublisher<LikeAddRequ
         Long domainId = domainEvent.getLikeAddRequest().getRelationId();
         log.info("Received LikeAddRequestEvent id: {} type : {}", domainId, domainEvent.getLikeAddRequest().getType());
         try {
-            String key = domainId+" "+domainEvent.getLikeAddRequest().getType().name();
+            String key = domainId+" "+domainEvent.getLikeAddRequest().getType();
 
             LikeAddRequestAvroModel avroModel = LikeAddRequestAvroModel.newBuilder()
                     .setRelationId(domainEvent.getLikeAddRequest().getRelationId())
