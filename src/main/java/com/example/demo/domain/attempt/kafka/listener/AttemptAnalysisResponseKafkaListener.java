@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import math.ai.my.kafka.infra.avrobuild.AttemptAnalysisResponseAvroModel;
 import math.ai.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisResponseDto;
-import math.ai.my.kafka.infra.kafka.listener.kafka.KafkaConsumer;
+import math.ai.my.kafka.infra.listener.KafkaConsumer;
 import math.ai.my.kafka.infra.kafka.mapper.AttemptAnalysisDataMapper;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
