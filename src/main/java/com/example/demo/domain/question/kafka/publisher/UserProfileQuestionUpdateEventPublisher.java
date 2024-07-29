@@ -1,7 +1,7 @@
 package com.example.demo.domain.question.kafka.publisher;
 
 import lombok.RequiredArgsConstructor;
-import math.ai.my.kafka.infra.avrobuild.UserProfileQuestionUpdateEvent;
+import temp.infra.avrobuild.math.ai.my.kafka.infra.avrobuild.UserProfileQuestionUpdateEvent;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 

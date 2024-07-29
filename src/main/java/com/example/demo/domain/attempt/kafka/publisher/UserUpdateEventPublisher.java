@@ -1,7 +1,7 @@
 package com.example.demo.domain.attempt.kafka.publisher;
 
 import lombok.RequiredArgsConstructor;
-import math.ai.my.kafka.infra.avrobuild.UserUpdateEvent;
+import temp.infra.avrobuild.math.ai.my.kafka.infra.avrobuild.UserUpdateEvent;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 

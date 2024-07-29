@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import math.ai.my.kafka.infra.kafka.dtos.RelationType;
+import temp.infra.kafka.dtos.RelationType;
 
 @Getter
 @NoArgsConstructor

@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import math.ai.my.kafka.infra.kafka.publisher.kafka.DomainEvent;
-import math.ai.my.kafka.infra.kafka.publisher.kafka.DomainEventPublisher;
+import temp.infra.kafka.publisher.kafka.DomainEvent;
+import temp.infra.kafka.publisher.kafka.DomainEventPublisher;
 
 import java.time.ZonedDateTime;
 import java.util.List;
