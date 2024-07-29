@@ -1,6 +1,8 @@
 package com.example.demo.domain.problem.exception;
 
-public class InvalidConceptTagException extends ProblemException{
+import com.example.demo.common.exception.DomainException;
+
+public class InvalidConceptTagException extends DomainException {
 
     public InvalidConceptTagException(String msg, Throwable cause) {
         super(msg, cause);

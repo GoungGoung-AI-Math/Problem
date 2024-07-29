@@ -1,6 +1,8 @@
 package com.example.demo.domain.problem.exception;
 
-public class ProblemException extends RuntimeException{
+import com.example.demo.common.exception.DomainException;
+
+public class ProblemException extends DomainException {
     public ProblemException(String msg, Throwable cause){
         super(msg, cause);
     }

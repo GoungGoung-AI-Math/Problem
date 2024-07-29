@@ -14,10 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.example.demo.domain.problem.entity.QProblem.problem;
@@ -56,7 +53,7 @@ public class ProblemRepositoryCustomImpl implements ProblemRepositoryCustom {
                     .where(problemConceptTag.problem.id.eq(response.getId()))
                     .fetch();
 
-            response.setTags(tags.stream().collect(Collectors.toSet()));
+            response.setTags(new HashSet<>(tags));
         }
 
         return results;

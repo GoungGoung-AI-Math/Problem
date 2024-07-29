@@ -1,7 +1,7 @@
 package com.example.demo.domain.attempt.mvc.dto;
 
 import com.example.demo.common.dto.ContentRequest;
-import com.example.demo.domain.attempt.mvc.entity.AttemptType;
+import com.example.demo.common.entity.ContentType;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
@@ -15,7 +15,7 @@ import java.util.List;
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class  AttemptMarkRequest{
     private Long problemId;
-    private AttemptType type;
+    private ContentType type;
     private List<ContentRequest> imgUrlsContent;
     private String textContent;
     private Integer answer;
