@@ -7,7 +7,7 @@ import math.ai.my.kafka.infra.avrobuild.AttemptAnalysisRequestAvroModel;
 import math.ai.my.kafka.infra.kafka.config.ProblemServiceKafkaConfigData;
 import math.ai.my.kafka.infra.kafka.mapper.AttemptAnalysisDataMapper;
 import math.ai.my.kafka.infra.kafka.producer.KafkaProducer;
-import math.ai.my.kafka.infra.listener.DomainEventPublisher;
+import math.ai.my.kafka.infra.kafka.listener.DomainEventPublisher;
 import org.springframework.stereotype.Component;
 
 @Slf4j
