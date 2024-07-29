@@ -41,7 +41,7 @@
 
 # AVRO Model 중앙화
 
-- KafkaInfra를 모든 레포지토리에서 subtree로 등록
+- KafkaInfra를 모든 레포지토리에서 subtree로 등록 
     - `git remote add kafkaInfra https://github.com/GoungGoung-AI-Math/KafkaInfra.git`
     - `git subtree add --prefix src/main/java/math/ai/my/kafka/infra kafkaInfra main`
 - Avro 파일 수정
