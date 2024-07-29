@@ -6,9 +6,6 @@ import com.example.demo.domain.attempt.kafka.publisher.AttemptAnalysisRequestPub
 import com.example.demo.domain.attempt.mvc.dto.AttemptMarkRequest;
 import com.example.demo.domain.attempt.mvc.dto.SimpleMarkResponse;
 import com.example.demo.domain.attempt.mvc.service.AttemptService;
-import com.example.demo.my.kafka.infra.kafka.dtos.AnalysisType;
-import com.example.demo.my.kafka.infra.kafka.dtos.MessageType;
-import com.example.demo.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

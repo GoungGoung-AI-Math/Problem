@@ -1,8 +1,8 @@
 package com.example.demo.domain.like.kafka.event;
 
+import Math.AI.my.kafka.infra.kafka.publisher.kafka.DomainEvent;
+import Math.AI.my.kafka.infra.kafka.publisher.kafka.DomainEventPublisher;
 import com.example.demo.domain.like.mvc.dto.LikeAddRequest;
-import User.Math.AI.my.kafka.infra.kafka.publisher.kafka.DomainEvent;
-import User.Math.AI.my.kafka.infra.kafka.publisher.kafka.DomainEventPublisher;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;

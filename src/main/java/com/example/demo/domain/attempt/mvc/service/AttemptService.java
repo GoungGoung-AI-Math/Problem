@@ -1,5 +1,11 @@
 package com.example.demo.domain.attempt.mvc.service;
 
+import Math.AI.my.kafka.infra.avrobuild.Math.AI.my.kafka.infra.avrobuild.UserUpdateEvent;
+import Math.AI.my.kafka.infra.kafka.dtos.AnalysisType;
+import Math.AI.my.kafka.infra.kafka.dtos.MessageType;
+import Math.AI.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisRequestDto;
+import Math.AI.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisResponseDto;
+import Math.AI.my.kafka.infra.kafka.dtos.attempt.analysis.ContentDto;
 import com.example.demo.domain.attempt.kafka.event.AttemptAnalysisRequestEvent;
 import com.example.demo.domain.attempt.kafka.publisher.AttemptAnalysisRequestPublisher;
 import com.example.demo.domain.attempt.kafka.publisher.UserUpdateEventPublisher;
@@ -12,16 +18,10 @@ import com.example.demo.domain.attempt.exception.AttemptException;
 import com.example.demo.domain.attempt.mvc.repository.AttemptRepository;
 import com.example.demo.domain.problem.entity.OfficialSolution;
 import com.example.demo.domain.problem.entity.Problem;
-import com.example.demo.domain.problem.entity.SolutionContentEntity;
 import com.example.demo.domain.problem.exception.ProblemException;
 import com.example.demo.domain.problem.repository.ProblemRepository;
 import com.example.demo.domain.review.entity.Review;
 import com.example.demo.domain.review.repository.ReviewRepository;
-import com.example.demo.my.kafka.infra.kafka.dtos.AnalysisType;
-import com.example.demo.my.kafka.infra.kafka.dtos.MessageType;
-import com.example.demo.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisRequestDto;
-import com.example.demo.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisResponseDto;
-import com.example.demo.my.kafka.infra.kafka.dtos.attempt.analysis.ContentDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.KafkaException;
@@ -31,7 +31,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Slf4j
 @Service
@@ -78,7 +77,7 @@ public class AttemptService {
         }
 
         // 유저 정보 업데이트 이벤트 생성 및 퍼블리싱
-        com.example.demo.avro.UserUpdateEvent userUpdateEvent = com.example.demo.avro.UserUpdateEvent.newBuilder()
+        UserUpdateEvent userUpdateEvent = UserUpdateEvent.newBuilder()
                 .setUserId(attempt.getUserId())
                 .setProblemId(savedProblemAttempt.getProblem().getId())
                 .setStatus(savedProblemAttempt.getStatus().toString())

@@ -1,6 +1,6 @@
 package com.example.demo.domain.like.mvc.dto;
 
-import com.example.demo.my.kafka.infra.kafka.dtos.RelationType;
+import Math.AI.my.kafka.infra.kafka.dtos.RelationType;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;

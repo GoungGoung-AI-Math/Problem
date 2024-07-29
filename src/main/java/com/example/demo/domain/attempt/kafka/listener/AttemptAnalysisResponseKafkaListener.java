@@ -1,10 +1,10 @@
 package com.example.demo.domain.attempt.kafka.listener;
 
+import Math.AI.my.kafka.infra.avrobuild.Math.AI.my.kafka.infra.avrobuild.AttemptAnalysisResponseAvroModel;
+import Math.AI.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisResponseDto;
+import Math.AI.my.kafka.infra.kafka.listener.kafka.KafkaConsumer;
+import Math.AI.my.kafka.infra.kafka.mapper.AttemptAnalysisDataMapper;
 import com.example.demo.domain.attempt.mvc.service.AttemptService;
-import com.example.demo.my.kafka.infra.avrobuild.AttemptAnalysisResponseAvroModel;
-import com.example.demo.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisResponseDto;
-import com.example.demo.my.kafka.infra.kafka.listener.kafka.KafkaConsumer;
-import com.example.demo.my.kafka.infra.kafka.mapper.AttemptAnalysisDataMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;

@@ -1,8 +1,8 @@
 package com.example.demo.domain.attempt.kafka.event;
 
-import com.example.demo.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisResponseDto;
-import com.example.demo.my.kafka.infra.kafka.publisher.kafka.DomainEvent;
-import com.example.demo.my.kafka.infra.kafka.publisher.kafka.DomainEventPublisher;
+import Math.AI.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisResponseDto;
+import Math.AI.my.kafka.infra.kafka.publisher.kafka.DomainEvent;
+import Math.AI.my.kafka.infra.kafka.publisher.kafka.DomainEventPublisher;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;

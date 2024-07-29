@@ -1,18 +1,22 @@
 package com.example.demo.domain.like.kafka.publisher;
 
+import Math.AI.my.kafka.infra.avrobuild.Math.AI.my.kafka.infra.avrobuild.LikeAddRequestAvroModel;
+import Math.AI.my.kafka.infra.avrobuild.Math.AI.my.kafka.infra.avrobuild.RelationType;
+import Math.AI.my.kafka.infra.kafka.config.ProblemServiceKafkaConfigData;
+import Math.AI.my.kafka.infra.kafka.producer.KafkaProducer;
+import Math.AI.my.kafka.infra.kafka.publisher.kafka.DomainEventPublisher;
 import com.example.demo.domain.like.kafka.event.LikeAddRequestEvent;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.producer.KafkaProducer;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class LikeAddRequestPublisher implements User.Math.AI.my.kafka.infra.kafka.publisher.kafka.DomainEventPublisher<LikeAddRequestEvent> {
+public class LikeAddRequestPublisher implements DomainEventPublisher<LikeAddRequestEvent> {
     private final KafkaProducer<String, LikeAddRequestAvroModel> kafkaProducer;
-    private final User.Math.AI.my.kafka.infra.kafka.config.ProblemServiceKafkaConfigData problemServiceKafkaConfigData;
+    private final ProblemServiceKafkaConfigData problemServiceKafkaConfigData;
 
     @Override
     public void publish(LikeAddRequestEvent domainEvent) {
@@ -22,10 +26,10 @@ public class LikeAddRequestPublisher implements User.Math.AI.my.kafka.infra.kafk
             String key = domainId+" "+domainEvent.getLikeAddRequest().getType().name();
 
             LikeAddRequestAvroModel avroModel = LikeAddRequestAvroModel.newBuilder()
-                    .setDomainId(domainEvent.getLikeAddRequest().getRelationId())
+                    .setRelationId(domainEvent.getLikeAddRequest().getRelationId())
                     .setGiverId(domainEvent.getLikeAddRequest().getGiverId())
                     .setReceiverId(domainEvent.getLikeAddRequest().getReceiverId())
-                    .setDomainType(DomainType.valueOf(domainEvent.getLikeAddRequest().getType().name()))
+                    .setRelationType(RelationType.valueOf(domainEvent.getLikeAddRequest().getType().name()))
                     .build();
 
             kafkaProducer.send(problemServiceKafkaConfigData.getLikeAddRequestTopicName(),
