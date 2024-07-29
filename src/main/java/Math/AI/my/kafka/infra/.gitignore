@@ -1,0 +1,5 @@
+/docker-compose/volumes/**
+.idea/**
+avrobuild/**
+docker-compose/volumes/**
+/avrobuild/**
