@@ -53,10 +53,8 @@ public class LikeService {
             case ANSWER -> valid = likeRepository.exitsAnswerById(addRequest.getDomainId() , addRequest.getReceiverId());
             default -> throw new LikeException("존재하지 않는 도메인 타입입니다.");
         }
-
         if(!valid){
             throw new LikeException("type : "+addRequest.getType()+" "+" id : "+addRequest.getDomainId()+" 해당 데이터는 존재하지 않습니다.");
         }
-
     }
 }
