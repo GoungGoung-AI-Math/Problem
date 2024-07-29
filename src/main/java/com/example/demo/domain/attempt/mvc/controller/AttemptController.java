@@ -36,6 +36,12 @@ public class AttemptController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/request-nicknames")
+    public ResponseEntity<Void> requestNicknames(@RequestBody List<Long> userIds) {
+        attemptService.requestUserNicknames(userIds);
+        return ResponseEntity.ok().build();
+    }
+
 //    @PostMapping("/test-kafka")
 //    public void test(){
 //        AttemptAnalysisRequestDto dto = AttemptAnalysisRequestDto.builder()
