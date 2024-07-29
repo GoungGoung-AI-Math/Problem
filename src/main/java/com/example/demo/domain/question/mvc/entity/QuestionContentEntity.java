@@ -1,4 +1,4 @@
-package com.example.demo.domain.question;
+package com.example.demo.domain.question.mvc.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

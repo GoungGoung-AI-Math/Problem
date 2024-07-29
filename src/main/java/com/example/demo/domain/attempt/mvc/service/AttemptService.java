@@ -1,11 +1,11 @@
 package com.example.demo.domain.attempt.mvc.service;
 
+import com.example.demo.common.entity.ContentType;
 import com.example.demo.domain.attempt.kafka.event.AttemptAnalysisRequestEvent;
 import com.example.demo.domain.attempt.kafka.publisher.AttemptAnalysisRequestPublisher;
 import com.example.demo.domain.attempt.kafka.publisher.UserUpdateEventPublisher;
 import com.example.demo.domain.attempt.mvc.dto.AttemptMarkRequest;
 import com.example.demo.domain.attempt.mvc.dto.SimpleMarkResponse;
-import com.example.demo.domain.attempt.mvc.entity.AttemptType;
 import com.example.demo.domain.attempt.mvc.entity.ProblemAttempt;
 import com.example.demo.domain.attempt.mvc.entity.Status;
 import com.example.demo.domain.attempt.exception.AttemptException;
@@ -116,14 +116,14 @@ public class AttemptService {
                 .forEach(solution -> contents.add(new ContentDto(MessageType.IMAGE_URL, solution.getImgUrl())));
 
         // 학생의 풀이가 Text인 경우
-        if (attempt.getType() == AttemptType.TEXT) {
+        if (attempt.getType() == ContentType.TEXT) {
             contents.add(new ContentDto(MessageType.TEXT, attempt.getTextContent()));
             // 학생의 풀이가 Image인 경우
-        } else if (attempt.getType() == AttemptType.IMAGE_URL) {
+        } else if (attempt.getType() == ContentType.IMAGE_URL) {
             attempt.getImgUrlsContent().forEach(imgUrl ->
                     contents.add(new ContentDto(MessageType.IMAGE_URL, imgUrl.getImgUrl())));
         } else {
-            throw new IllegalArgumentException("Unsupported AttemptType: " + attempt.getType());
+            throw new IllegalArgumentException("Unsupported ContentType: " + attempt.getType());
         }
 
         AttemptAnalysisRequestEvent event = AttemptAnalysisRequestEvent.builder()
