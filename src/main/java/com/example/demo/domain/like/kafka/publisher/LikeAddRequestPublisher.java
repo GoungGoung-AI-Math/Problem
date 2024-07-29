@@ -22,7 +22,7 @@ public class LikeAddRequestPublisher implements DomainEventPublisher<LikeAddRequ
         Long domainId = domainEvent.getLikeAddRequest().getRelationId();
         log.info("Received LikeAddRequestEvent id: {} type : {}", domainId, domainEvent.getLikeAddRequest().getType());
         try {
-            String key = String.valueOf(domainId);
+            String key = domainId+" "+domainEvent.getLikeAddRequest().getType().name();
 
             LikeAddRequestAvroModel avroModel = LikeAddRequestAvroModel.newBuilder()
                     .setDomainId(domainEvent.getLikeAddRequest().getRelationId())
