@@ -6,6 +6,10 @@
     {
       "name": "userIds",
       "type": "string"
+    },
+    {
+      "name": "requestId",
+      "type": "string"
     }
   ]
 }

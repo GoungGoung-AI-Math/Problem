@@ -18,4 +18,12 @@ public class MarkResultListResponse {
     private LocalDateTime time;
     private Long reviewId;
     private Status status;
+
+    public MarkResultListResponse(Long userId, Difficulty difficulty, LocalDateTime time, Status status) {
+        this.userId = userId;
+        this.difficulty = difficulty;
+        //        this.reviewId = reviewId;
+        this.time = time;
+        this.status = status;
+    }
 }

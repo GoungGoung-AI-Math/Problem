@@ -6,6 +6,10 @@
     {
       "name": "nicknames",
       "type": "string"
+    },
+    {
+      "name": "requestId",
+      "type": "string"
     }
   ]
 }
