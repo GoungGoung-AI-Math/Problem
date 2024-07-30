@@ -41,19 +41,22 @@ public class AttemptService {
     private final AttemptRepository attemptRepository;
     private final AttemptAnalysisRequestPublisher attemptAnalysisRequestPublisher;
     private final UserUpdateEventPublisher userUpdateEventPublisher;
+    private final KafkaProducer<String, com.example.demo.avro.UserIdListAvro> kafkaProducer;
+    private final ConcurrentMap<String, CompletableFuture<List<String>>> nicknameFutures = new ConcurrentHashMap<>();
 
     /**
      * 1. 답 체크
      * 2. PENDDING 상태의 시도 저장
      * 3. GPT에게 비동기로 분석 요청
      * 3-1. 시도 응답
+     *
      * @param attempt
      */
     @Transactional
     public SimpleMarkResponse markAttemptSolution(AttemptMarkRequest attempt) {
-        log.info("problem id : {}, content : {}",attempt.getProblemId(), attempt.getTextContent());
+        log.info("problem id : {}, content : {}", attempt.getProblemId(), attempt.getTextContent());
         Problem problem = problemRepository.findByIdWithSolution(attempt.getProblemId());
-        if(problem == null) throw new ProblemException("존재하지 않는 문제입니다.");
+        if (problem == null) throw new ProblemException("존재하지 않는 문제입니다.");
 
         Status status = problem.getAnswer().equals(attempt.getAnswer()) ? Status.PENDING : Status.FAIL;
         ProblemAttempt problemAttempt = ProblemAttempt.toEntity(attempt, problem, status);
@@ -77,7 +80,7 @@ public class AttemptService {
         }
 
         // 유저 정보 업데이트 이벤트 생성 및 퍼블리싱
-        UserUpdateEvent userUpdateEvent = UserUpdateEvent.newBuilder()
+        com.example.demo.avro.UserUpdateEvent userUpdateEvent = com.example.demo.avro.UserUpdateEvent.newBuilder()
                 .setUserId(attempt.getUserId())
                 .setProblemId(savedProblemAttempt.getProblem().getId())
                 .setStatus(savedProblemAttempt.getStatus().toString())
@@ -135,5 +138,68 @@ public class AttemptService {
                         .build())
                 .build();
         event.fire();
+    }
+
+    @KafkaListener(topics = "nickname-list-topic2", groupId = "group-id")
+    public void receive(com.example.demo.avro.NicknameListAvro message) {
+        String requestId = message.getRequestId(); // 메시지 페이로드에서 requestId 추출
+        List<String> nicknames = Arrays.asList(message.getNicknames().split(","));
+
+        log.info("Received NicknameListAvro with requestId: {} and nicknames: {}", requestId, nicknames);
+
+        CompletableFuture<List<String>> future = nicknameFutures.remove(requestId);
+        if (future != null) {
+            future.complete(nicknames);
+            log.info("Completed future for requestId: {}", requestId);
+        } else {
+            log.warn("No future found for requestId: {}", requestId);
+        }
+    }
+
+
+
+    public Page<MarkResultListResponse> getMarkResultListByProblemId(Long problemId, Pageable pageable) throws ExecutionException, InterruptedException {
+        Page<MarkResultListResponse> resultsPage = attemptRepository.findMarkResultListByProblemId(problemId, pageable);
+        log.info("###########={}", resultsPage);
+        List<MarkResultListResponse> results = resultsPage.getContent();
+        log.info("###########={}", results);
+        List<Long> userIds = results.stream().map(MarkResultListResponse::getUserId).collect(Collectors.toList());
+        log.info("###########={}", userIds);
+        List<String> nicknames = requestUserNicknames(userIds);
+
+        Map<Long, String> userIdToNicknameMap = createUserIdToNicknameMap(userIds, nicknames);
+
+        results.forEach(result -> result.setNickName(userIdToNicknameMap.get(result.getUserId())));
+
+        return resultsPage;
+    }
+
+    public List<String> requestUserNicknames(List<Long> userIds) throws ExecutionException, InterruptedException {
+        String requestId = generateRequestId();
+        CompletableFuture<List<String>> future = new CompletableFuture<>();
+        nicknameFutures.put(requestId, future);
+
+        String userIdList = userIds.stream().map(String::valueOf).collect(Collectors.joining(","));
+        com.example.demo.avro.UserIdListAvro userIdListAvro = new com.example.demo.avro.UserIdListAvro();
+        userIdListAvro.setUserIds(userIdList); // 필드 설정
+        userIdListAvro.setRequestId(requestId); // 필드 설정
+
+        log.info("Sending UserIdListAvro with requestId: {} and userIds: {}", requestId, userIdList);
+        kafkaProducer.send("user-id-list-topic", null, userIdListAvro);
+
+        log.info("Waiting for nickname response for requestId: {}", requestId);
+        return future.get(); // 닉네임 응답을 기다림
+    }
+
+
+    private String generateRequestId() {
+        return java.util.UUID.randomUUID().toString();
+    }
+
+    private Map<Long, String> createUserIdToNicknameMap(List<Long> userIds, List<String> nicknames) {
+        return userIds.stream().collect(Collectors.toMap(userId -> userId, userId -> {
+            int index = userIds.indexOf(userId);
+            return nicknames.get(index);
+        }));
     }
 }
