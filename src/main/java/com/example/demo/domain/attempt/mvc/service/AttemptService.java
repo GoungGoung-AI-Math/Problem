@@ -155,11 +155,19 @@ public class AttemptService {
     public void receive(com.example.demo.avro.NicknameListAvro message) {
         String requestId = message.getRequestId(); // 메시지 페이로드에서 requestId 추출
         List<String> nicknames = Arrays.asList(message.getNicknames().split(","));
+
+        log.info("Received NicknameListAvro with requestId: {} and nicknames: {}", requestId, nicknames);
+
         CompletableFuture<List<String>> future = nicknameFutures.remove(requestId);
         if (future != null) {
             future.complete(nicknames);
+            log.info("Completed future for requestId: {}", requestId);
+        } else {
+            log.warn("No future found for requestId: {}", requestId);
         }
     }
+
+
 
     public Page<MarkResultListResponse> getMarkResultListByProblemId(Long problemId, Pageable pageable) throws ExecutionException, InterruptedException {
         Page<MarkResultListResponse> resultsPage = attemptRepository.findMarkResultListByProblemId(problemId, pageable);
@@ -186,8 +194,11 @@ public class AttemptService {
         com.example.demo.avro.UserIdListAvro userIdListAvro = new com.example.demo.avro.UserIdListAvro();
         userIdListAvro.setUserIds(userIdList); // 필드 설정
         userIdListAvro.setRequestId(requestId); // 필드 설정
+
+        log.info("Sending UserIdListAvro with requestId: {} and userIds: {}", requestId, userIdList);
         kafkaProducer.send("user-id-list-topic", null, userIdListAvro);
 
+        log.info("Waiting for nickname response for requestId: {}", requestId);
         return future.get(); // 닉네임 응답을 기다림
     }
 
