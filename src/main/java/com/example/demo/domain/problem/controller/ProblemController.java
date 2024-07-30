@@ -30,4 +30,10 @@ public class ProblemController {
         List<ProblemResponse> problemList = problemService.getProblems(examId);
         return ResponseEntity.ok(problemList);
     }
+
+    @GetMapping("/main-top3")
+    public ResponseEntity<List<ProblemResponse>> getTop3AtMain() {
+        List<ProblemResponse> result = problemService.getTop3LowestCorrectRateProblems();
+        return ResponseEntity.ok(result);
+    }
 }

@@ -56,6 +56,10 @@ public class Problem {
     @Column
     private Integer answer;
 
+    // 정답률
+    @Column
+    private Double correctRate;
+
     @Getter
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "problem_id")

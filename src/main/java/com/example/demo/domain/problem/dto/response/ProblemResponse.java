@@ -20,6 +20,7 @@ public class ProblemResponse {
     private LocalDateTime createDate;
     private Set<String> tags;
     private Long totalSolved;
+    private Double correctRate;
 
     public ProblemResponse(Long id, String name, String imgUrl, Difficulty difficulty, LocalDateTime createDate, Long totalSolved) {
         this.id = id;
@@ -28,5 +29,15 @@ public class ProblemResponse {
         this.difficulty = difficulty;
         this.createDate = createDate;
         this.totalSolved = totalSolved;
+    }
+
+    public ProblemResponse(Long id, String name, String imgUrl, Difficulty difficulty, LocalDateTime createDate, Long totalSolved, Double correctRate) {
+        this.id = id;
+        this.name = name;
+        this.imgUrl = imgUrl;
+        this.difficulty = difficulty;
+        this.createDate = createDate;
+        this.totalSolved = totalSolved;
+        this.correctRate = correctRate;
     }
 }

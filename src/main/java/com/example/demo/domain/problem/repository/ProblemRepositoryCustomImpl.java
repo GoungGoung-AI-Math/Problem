@@ -58,4 +58,39 @@ public class ProblemRepositoryCustomImpl implements ProblemRepositoryCustom {
 
         return results;
     }
+
+    @Override
+    public List<ProblemResponse> findTop3LowestCorrectRateProblems() {
+        QProblem problem = QProblem.problem;
+        QProblemConceptTag problemConceptTag = QProblemConceptTag.problemConceptTag;
+        QConceptTag conceptTag = QConceptTag.conceptTag;
+
+        List<ProblemResponse> results = jpaQueryFactory
+                .select(Projections.constructor(ProblemResponse.class,
+                        problem.id,
+                        problem.name,
+                        problem.imgUrl,
+                        problem.difficulty,
+                        problem.createDate,
+                        problem.exam.totalSolved,
+                        problem.correctRate
+                ))
+                .from(problem)
+                .orderBy(problem.correctRate.asc()) // 정답률이 낮은 순으로 정렬
+                .limit(3) // 상위 3개만 가져옴
+                .fetch();
+
+        for (ProblemResponse response : results) {
+            List<String> tags = jpaQueryFactory
+                    .select(conceptTag.tageName)
+                    .from(problemConceptTag)
+                    .join(problemConceptTag.conceptTag, conceptTag)
+                    .where(problemConceptTag.problem.id.eq(response.getId()))
+                    .fetch();
+
+            response.setTags(new HashSet<>(tags));
+        }
+
+        return results;
+    }
 }

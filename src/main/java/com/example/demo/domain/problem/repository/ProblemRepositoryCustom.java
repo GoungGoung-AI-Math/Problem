@@ -9,4 +9,5 @@ import java.util.List;
 public interface ProblemRepositoryCustom {
 //    Page<Problem> searchAll();
     List<ProblemResponse> findProblemsByExamId(Long examId);
+    List<ProblemResponse> findTop3LowestCorrectRateProblems();
 }

@@ -79,4 +79,7 @@ public class ProblemService {
         return problemRepository.findProblemsByExamId(examId);
     }
 
+    public List<ProblemResponse> getTop3LowestCorrectRateProblems() {
+        return problemRepository.findTop3LowestCorrectRateProblems();
+    }
 }
