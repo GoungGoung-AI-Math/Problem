@@ -1,11 +1,12 @@
 package com.example.demo.domain.attempt.mvc.service;
 
+import com.example.demo.common.entity.ContentType;
 import com.example.demo.domain.attempt.kafka.event.AttemptAnalysisRequestEvent;
 import com.example.demo.domain.attempt.kafka.publisher.AttemptAnalysisRequestPublisher;
 import com.example.demo.domain.attempt.kafka.publisher.UserUpdateEventPublisher;
 import com.example.demo.domain.attempt.mvc.dto.AttemptMarkRequest;
+import com.example.demo.domain.attempt.mvc.dto.MarkResultListResponse;
 import com.example.demo.domain.attempt.mvc.dto.SimpleMarkResponse;
-import com.example.demo.domain.attempt.mvc.entity.AttemptType;
 import com.example.demo.domain.attempt.mvc.entity.ProblemAttempt;
 import com.example.demo.domain.attempt.mvc.entity.Status;
 import com.example.demo.domain.attempt.exception.AttemptException;
@@ -18,19 +19,29 @@ import com.example.demo.domain.review.entity.Review;
 import com.example.demo.domain.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import math.ai.my.kafka.infra.avrobuild.UserUpdateEvent;
 import math.ai.my.kafka.infra.kafka.dtos.AnalysisType;
 import math.ai.my.kafka.infra.kafka.dtos.MessageType;
 import math.ai.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisRequestDto;
 import math.ai.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisResponseDto;
 import math.ai.my.kafka.infra.kafka.dtos.attempt.analysis.ContentDto;
+import math.ai.my.kafka.infra.kafka.producer.KafkaProducer;
 import org.apache.kafka.common.KafkaException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -80,7 +91,7 @@ public class AttemptService {
         }
 
         // 유저 정보 업데이트 이벤트 생성 및 퍼블리싱
-        com.example.demo.avro.UserUpdateEvent userUpdateEvent = com.example.demo.avro.UserUpdateEvent.newBuilder()
+        math.ai.my.kafka.infra.avrobuild.UserUpdateEvent userUpdateEvent = math.ai.my.kafka.infra.avrobuild.UserUpdateEvent.newBuilder()
                 .setUserId(attempt.getUserId())
                 .setProblemId(savedProblemAttempt.getProblem().getId())
                 .setStatus(savedProblemAttempt.getStatus().toString())
@@ -118,10 +129,10 @@ public class AttemptService {
                 .forEach(solution -> contents.add(new ContentDto(MessageType.IMAGE_URL, solution.getImgUrl())));
 
         // 학생의 풀이가 Text인 경우
-        if (attempt.getType() == AttemptType.TEXT) {
+        if (attempt.getType() == ContentType.TEXT) {
             contents.add(new ContentDto(MessageType.TEXT, attempt.getTextContent()));
             // 학생의 풀이가 Image인 경우
-        } else if (attempt.getType() == AttemptType.IMAGE_URL) {
+        } else if (attempt.getType() == ContentType.IMAGE_URL) {
             attempt.getImgUrlsContent().forEach(imgUrl ->
                     contents.add(new ContentDto(MessageType.IMAGE_URL, imgUrl.getImgUrl())));
         } else {
