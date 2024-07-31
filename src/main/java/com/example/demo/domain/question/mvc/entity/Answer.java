@@ -28,6 +28,9 @@ public class Answer{
     @Column
     private String title;
 
+    @Column(name = "user_id")
+    private Long userId;
+
     @Column
     private String content;
 

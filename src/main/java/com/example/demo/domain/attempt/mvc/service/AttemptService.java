@@ -13,30 +13,30 @@ import com.example.demo.domain.attempt.exception.AttemptException;
 import com.example.demo.domain.attempt.mvc.repository.AttemptRepository;
 import com.example.demo.domain.problem.entity.OfficialSolution;
 import com.example.demo.domain.problem.entity.Problem;
-import com.example.demo.domain.problem.entity.SolutionContentEntity;
 import com.example.demo.domain.problem.exception.ProblemException;
 import com.example.demo.domain.problem.repository.ProblemRepository;
 import com.example.demo.domain.review.entity.Review;
 import com.example.demo.domain.review.repository.ReviewRepository;
-import com.example.demo.my.kafka.infra.kafka.dtos.AnalysisType;
-import com.example.demo.my.kafka.infra.kafka.dtos.MessageType;
-import com.example.demo.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisRequestDto;
-import com.example.demo.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisResponseDto;
-import com.example.demo.my.kafka.infra.kafka.dtos.attempt.analysis.ContentDto;
-import com.example.demo.my.kafka.infra.kafka.producer.KafkaProducer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import math.ai.my.kafka.infra.kafka.dtos.AnalysisType;
+import math.ai.my.kafka.infra.kafka.dtos.MessageType;
+import math.ai.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisRequestDto;
+import math.ai.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisResponseDto;
+import math.ai.my.kafka.infra.kafka.dtos.attempt.analysis.ContentDto;
+import math.ai.my.kafka.infra.kafka.producer.KafkaProducer;
 import org.apache.kafka.common.KafkaException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.support.KafkaHeaders;
-import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -91,7 +91,7 @@ public class AttemptService {
         }
 
         // 유저 정보 업데이트 이벤트 생성 및 퍼블리싱
-        com.example.demo.avro.UserUpdateEvent userUpdateEvent = com.example.demo.avro.UserUpdateEvent.newBuilder()
+        math.ai.my.kafka.infra.avrobuild.UserUpdateEvent userUpdateEvent = math.ai.my.kafka.infra.avrobuild.UserUpdateEvent.newBuilder()
                 .setUserId(attempt.getUserId())
                 .setProblemId(savedProblemAttempt.getProblem().getId())
                 .setStatus(savedProblemAttempt.getStatus().toString())
@@ -113,7 +113,7 @@ public class AttemptService {
         reviewRepository.save(review);
         // attempt 상태 수정
         ProblemAttempt attempt = attemptRepository.findById(dto.getAttemptId())
-                .orElseThrow(() -> new AttemptException("존재하지 않는 시도입니다."));
+                .orElseThrow(()-> new AttemptException("존재하지 않는 시도입니다."));
         attempt.updateState(Status.SUCCESS);
     }
 
@@ -122,7 +122,7 @@ public class AttemptService {
         // 문제 사진 입력
         contents.add(new ContentDto(MessageType.IMAGE_URL, problemImgUrl));
         // 정답 정보 입력
-        if (!(officialSolution.getTextSolution() == null || officialSolution.getTextSolution().isBlank())) {
+        if(!(officialSolution.getTextSolution() == null || officialSolution.getTextSolution().isBlank())){
             contents.add(new ContentDto(MessageType.TEXT, officialSolution.getTextSolution()));
         }
         officialSolution.getSolutionContents()
@@ -136,7 +136,7 @@ public class AttemptService {
             attempt.getImgUrlsContent().forEach(imgUrl ->
                     contents.add(new ContentDto(MessageType.IMAGE_URL, imgUrl.getImgUrl())));
         } else {
-            throw new IllegalArgumentException("Unsupported ContentType: " + attempt.getType());
+            throw new IllegalArgumentException("Unsupported AttemptType: " + attempt.getType());
         }
 
         AttemptAnalysisRequestEvent event = AttemptAnalysisRequestEvent.builder()

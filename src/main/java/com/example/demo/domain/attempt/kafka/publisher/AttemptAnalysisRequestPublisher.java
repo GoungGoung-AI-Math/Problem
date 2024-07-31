@@ -1,13 +1,13 @@
 package com.example.demo.domain.attempt.kafka.publisher;
 
 import com.example.demo.domain.attempt.kafka.event.AttemptAnalysisRequestEvent;
-import com.example.demo.my.kafka.infra.avrobuild.AttemptAnalysisRequestAvroModel;
-import com.example.demo.my.kafka.infra.kafka.config.ProblemServiceKafkaConfigData;
-import com.example.demo.my.kafka.infra.kafka.mapper.AttemptAnalysisDataMapper;
-import com.example.demo.my.kafka.infra.kafka.producer.KafkaProducer;
-import com.example.demo.my.kafka.infra.kafka.publisher.kafka.DomainEventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import math.ai.my.kafka.infra.avrobuild.AttemptAnalysisRequestAvroModel;
+import math.ai.my.kafka.infra.kafka.config.ProblemServiceKafkaConfigData;
+import math.ai.my.kafka.infra.kafka.mapper.AttemptAnalysisDataMapper;
+import math.ai.my.kafka.infra.kafka.producer.KafkaProducer;
+import math.ai.my.kafka.infra.kafka.listener.DomainEventPublisher;
 import org.springframework.stereotype.Component;
 
 @Slf4j

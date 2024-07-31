@@ -1,15 +1,16 @@
 package com.example.demo.domain.attempt.kafka.publisher;
 
 import lombok.RequiredArgsConstructor;
+import math.ai.my.kafka.infra.avrobuild.UserUpdateEvent;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class UserUpdateEventPublisher {
-    private final KafkaTemplate<String, com.example.demo.avro.UserUpdateEvent> kafkaTemplate;
+    private final KafkaTemplate<String, UserUpdateEvent> kafkaTemplate;
 
-    public void publish(String topic, com.example.demo.avro.UserUpdateEvent event) {
+    public void publish(String topic, UserUpdateEvent event) {
         kafkaTemplate.send(topic, event);
     }
 }

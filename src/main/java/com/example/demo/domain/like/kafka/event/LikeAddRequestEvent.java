@@ -1,12 +1,11 @@
-package com.example.demo.domain.attempt.kafka.event;
+package com.example.demo.domain.like.kafka.event;
 
-
+import com.example.demo.domain.like.mvc.dto.LikeAddRequest;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import math.ai.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisRequestDto;
 import math.ai.my.kafka.infra.kafka.listener.DomainEvent;
 import math.ai.my.kafka.infra.kafka.listener.DomainEventPublisher;
 
@@ -17,14 +16,14 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class AttemptAnalysisRequestEvent implements DomainEvent<AttemptAnalysisRequestDto> {
-    private final AttemptAnalysisRequestDto attemptAnalysisDto;
+public class LikeAddRequestEvent implements DomainEvent<LikeAddRequest> {
+    private final LikeAddRequest likeAddRequest;
     private final List<String> failureMessages;
     private final ZonedDateTime createdAt;
-    private final DomainEventPublisher<AttemptAnalysisRequestEvent> attemptAnalysisEventDomainEventPublisher;
+    private final DomainEventPublisher<LikeAddRequestEvent> likeAddRequestEventDomainEventPublisher;
 
     @Override
     public void fire() {
-        attemptAnalysisEventDomainEventPublisher.publish(this);
+        likeAddRequestEventDomainEventPublisher.publish(this);
     }
 }
