@@ -19,6 +19,12 @@ import com.example.demo.domain.review.entity.Review;
 import com.example.demo.domain.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import math.ai.my.kafka.infra.avrobuild.*;
+import math.ai.my.kafka.infra.avrobuild.NicknameListAvro;
+import math.ai.my.kafka.infra.avrobuild.UserIdListAvro;
+import math.ai.my.kafka.infra.avrobuild.UserUpdateAttempt;
+import math.ai.my.kafka.infra.avrobuild.UserUpdateEvent;
+import math.ai.my.kafka.infra.avrobuild.UserUpdateTest;
 import math.ai.my.kafka.infra.kafka.dtos.AnalysisType;
 import math.ai.my.kafka.infra.kafka.dtos.MessageType;
 import math.ai.my.kafka.infra.kafka.dtos.attempt.analysis.AttemptAnalysisRequestDto;
@@ -52,7 +58,8 @@ public class AttemptService {
     private final AttemptRepository attemptRepository;
     private final AttemptAnalysisRequestPublisher attemptAnalysisRequestPublisher;
     private final UserUpdateEventPublisher userUpdateEventPublisher;
-    private final KafkaProducer<String, com.example.demo.avro.UserIdListAvro> kafkaProducer;
+    private final KafkaProducer<String, UserIdListAvro> kafkaProducer;
+    private final KafkaProducer<String, UserUpdateAttempt> userUpdateEventKafkaProducer;
     private final ConcurrentMap<String, CompletableFuture<List<String>>> nicknameFutures = new ConcurrentHashMap<>();
 
     /**
@@ -91,13 +98,18 @@ public class AttemptService {
         }
 
         // 유저 정보 업데이트 이벤트 생성 및 퍼블리싱
-        math.ai.my.kafka.infra.avrobuild.UserUpdateEvent userUpdateEvent = math.ai.my.kafka.infra.avrobuild.UserUpdateEvent.newBuilder()
+//        math.ai.my.kafka.infra.avrobuild.UserUpdateEvent userUpdateEvent = math.ai.my.kafka.infra.avrobuild.UserUpdateEvent.newBuilder()
+//                .setUserId(attempt.getUserId())
+//                .setProblemId(savedProblemAttempt.getProblem().getId())
+//                .setStatus(savedProblemAttempt.getStatus().toString())
+//                .build();
+        math.ai.my.kafka.infra.avrobuild.UserUpdateAttempt userUpdateEvent = UserUpdateAttempt.newBuilder()
                 .setUserId(attempt.getUserId())
                 .setProblemId(savedProblemAttempt.getProblem().getId())
                 .setStatus(savedProblemAttempt.getStatus().toString())
                 .build();
 
-        userUpdateEventPublisher.publish("user-update-topic", userUpdateEvent);
+        userUpdateEventKafkaProducer.send("user-update-attempt-topic",null,userUpdateEvent);
 
         return SimpleMarkResponse.builder()
                 .attemptId(savedProblemAttempt.getId())
@@ -152,7 +164,7 @@ public class AttemptService {
     }
 
     @KafkaListener(topics = "nickname-list-topic2", groupId = "group-id")
-    public void receive(com.example.demo.avro.NicknameListAvro message) {
+    public void receive(NicknameListAvro message) {
         String requestId = message.getRequestId(); // 메시지 페이로드에서 requestId 추출
         List<String> nicknames = Arrays.asList(message.getNicknames().split(","));
 
@@ -191,7 +203,7 @@ public class AttemptService {
         nicknameFutures.put(requestId, future);
 
         String userIdList = userIds.stream().map(String::valueOf).collect(Collectors.joining(","));
-        com.example.demo.avro.UserIdListAvro userIdListAvro = new com.example.demo.avro.UserIdListAvro();
+        UserIdListAvro userIdListAvro = new UserIdListAvro();
         userIdListAvro.setUserIds(userIdList); // 필드 설정
         userIdListAvro.setRequestId(requestId); // 필드 설정
 
@@ -212,5 +224,15 @@ public class AttemptService {
             int index = userIds.indexOf(userId);
             return nicknames.get(index);
         }));
+    }
+
+    public void createAndPublishUserUpdateEvent(Long userId, Long problemId, String status) {
+        math.ai.my.kafka.infra.avrobuild.UserUpdateAttempt userUpdateEvent = UserUpdateAttempt.newBuilder()
+                .setUserId(userId)
+                .setProblemId(problemId)
+                .setStatus(Status.SUCCESS.getStatus())
+                .build();
+
+        userUpdateEventKafkaProducer.send("user-update-attempt-topic",null,userUpdateEvent);
     }
 }

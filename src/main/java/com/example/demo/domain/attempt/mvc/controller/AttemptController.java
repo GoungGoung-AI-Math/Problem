@@ -44,6 +44,13 @@ public class AttemptController {
         }
     }
 
+    @GetMapping("/test/user-update-event")
+    public String testUserUpdateEvent(@RequestParam Long userId,
+                                      @RequestParam Long problemId,
+                                      @RequestParam String status) {
+        attemptService.createAndPublishUserUpdateEvent(userId, problemId, status);
+        return "User update event published successfully!";
+    }
 
 //    @PostMapping("/test-kafka")
 //    public void test(){
