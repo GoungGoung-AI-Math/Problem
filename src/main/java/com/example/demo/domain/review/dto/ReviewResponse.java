@@ -1,5 +1,6 @@
 package com.example.demo.domain.review.dto;
 
+import com.example.demo.domain.review.entity.ReviewContent;
 import com.example.demo.domain.review.entity.ReviewerType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,12 +14,14 @@ public class ReviewResponse {
     private Long problemAttemptId;
     private ReviewerType type;
     private String title;
-    private List<String> contents;
+    private String content;
+    private List<String> imgUrls;
 
-    public ReviewResponse(Long problemId, Long problemAttemptId, ReviewerType type, String title) {
+    public ReviewResponse(Long problemId, Long problemAttemptId, ReviewerType type, String title, String content) {
         this.problemId = problemId;
         this.problemAttemptId = problemAttemptId;
         this.type = type;
         this.title = title;
+        this.content = content;
     }
 }
