@@ -50,6 +50,7 @@ public class ProblemAttempt{
     @Column
     private Status status;
 
+    @Getter
     @Column(name = "user_id")
     private Long userId;
 
