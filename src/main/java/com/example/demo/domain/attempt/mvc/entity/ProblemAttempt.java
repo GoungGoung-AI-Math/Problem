@@ -3,6 +3,7 @@ package com.example.demo.domain.attempt.mvc.entity;
 import com.example.demo.common.dto.ContentRequest;
 import com.example.demo.domain.attempt.mvc.dto.AttemptMarkRequest;
 import com.example.demo.domain.problem.entity.Problem;
+import com.example.demo.domain.review.entity.Review;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -59,7 +60,8 @@ public class ProblemAttempt{
     @JoinColumn(name = "problem_attempt_id")
     private Set<AttemptContentEntity> attemptContents;
 
-
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "problemAttempt", cascade = CascadeType.ALL)
+    private Set<Review> reviews = new HashSet<>();
 
     public static ProblemAttempt toEntity(AttemptMarkRequest request, Problem problem, Status status){
         return ProblemAttempt.builder()

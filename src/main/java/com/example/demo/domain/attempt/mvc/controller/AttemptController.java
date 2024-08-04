@@ -28,9 +28,9 @@ public class AttemptController {
     private final AttemptAnalysisRequestPublisher attemptAnalysisRequestPublisher;
 
     @PostMapping
-    public ResponseEntity<SimpleMarkResponse> sendAttemptToMarking(@RequestBody AttemptMarkRequest attempt){
+    public ResponseEntity<SimpleMarkResponse> sendAttemptToMarking(@RequestBody AttemptMarkRequest attempt) {
         SimpleMarkResponse response = attemptService.markAttemptSolution(attempt);
-        log.info("id : {}, status : {}",response.getProblemId(), response.getStatus().getStatus());
+        log.info("id : {}, status : {}", response.getProblemId(), response.getStatus().getStatus());
         return ResponseEntity.ok(response);
     }
 
@@ -44,6 +44,23 @@ public class AttemptController {
         }
     }
 
+    @GetMapping("/problem/{problemId}/user")
+    public ResponseEntity<Page<MarkResultListResponse>> getMarkResultListByProblemIdAndUserId(@PathVariable Long problemId, @RequestParam Long userId, Pageable pageable) {
+        try {
+            Page<MarkResultListResponse> results = attemptService.getMarkResultListByProblemIdAndUserId(problemId, userId, pageable);
+            return ResponseEntity.ok(results);
+        } catch (ExecutionException | InterruptedException e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
+
+    @GetMapping("/test/user-update-event")
+    public String testUserUpdateEvent(@RequestParam Long userId,
+                                      @RequestParam Long problemId,
+                                      @RequestParam String status) {
+        attemptService.createAndPublishUserUpdateEvent(userId, problemId, status);
+        return "User update event published successfully!";
+    }
 
 //    @PostMapping("/test-kafka")
 //    public void test(){

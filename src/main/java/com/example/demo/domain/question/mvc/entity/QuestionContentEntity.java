@@ -3,6 +3,7 @@ package com.example.demo.domain.question.mvc.entity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
@@ -16,8 +17,10 @@ public class QuestionContentEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Getter
     @Column(name = "img_url")
     private String imgUrl;
+
     @ManyToOne
     @JoinColumn(name = "question_id")
     private Question question;
