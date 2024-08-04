@@ -9,4 +9,6 @@ import java.util.concurrent.ExecutionException;
 
 public interface AttemptRepositoryCustom {
     Page<MarkResultListResponse> findMarkResultListByProblemId(Long problemId, Pageable pageable) throws ExecutionException, InterruptedException;
+
+    Page<MarkResultListResponse> findMarkResultListByProblemIdAndUserId(Long problemId, Long userId, Pageable pageable);
 }

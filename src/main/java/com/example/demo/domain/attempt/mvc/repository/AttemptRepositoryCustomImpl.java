@@ -48,4 +48,29 @@ public class AttemptRepositoryCustomImpl implements AttemptRepositoryCustom {
         int end = Math.min((start + pageable.getPageSize()), results.size());
         return new PageImpl<>(results.subList(start, end), pageable, results.size());
     }
+
+    @Override
+    public Page<MarkResultListResponse> findMarkResultListByProblemIdAndUserId(Long problemId, Long userId ,Pageable pageable) {
+        QProblemAttempt attempt = QProblemAttempt.problemAttempt;
+        QProblem problem = QProblem.problem;
+
+        log.info("###############={}", attempt.id);
+        List<MarkResultListResponse> results = jpaQueryFactory
+                .select(Projections.constructor(MarkResultListResponse.class,
+                        attempt.userId,
+                        problem.difficulty,
+                        attempt.createDate,
+                        attempt.status
+                ))
+                .from(attempt)
+                .leftJoin(attempt.problem, problem)
+                .where(problem.id.eq(problemId)
+                        .and(attempt.userId.eq(userId)))
+                .fetch();
+
+        // 페이징 처리
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), results.size());
+        return new PageImpl<>(results.subList(start, end), pageable, results.size());
+    }
 }
