@@ -1,5 +1,6 @@
 package com.example.demo.domain.review.entity;
 
+import com.example.demo.domain.attempt.mvc.entity.ProblemAttempt;
 import com.example.demo.domain.problem.entity.Problem;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -49,6 +50,11 @@ public class Review {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "review_id")
     private Set<ReviewContent> reviewContents;
+
+    @ManyToOne
+    @JoinColumn(name = "problem_attempt_id", nullable = false)
+    private ProblemAttempt problemAttempt;
+
 
     public static Review aiAnalysis(String content) {
         // content에서 앞 15글자를 추출하여 title 변수에 저장합니다.
