@@ -3,7 +3,6 @@ package com.example.demo.domain.attempt.mvc.service;
 import com.example.demo.common.entity.ContentType;
 import com.example.demo.domain.attempt.kafka.event.AttemptAnalysisRequestEvent;
 import com.example.demo.domain.attempt.kafka.publisher.AttemptAnalysisRequestPublisher;
-import com.example.demo.domain.attempt.kafka.publisher.UserUpdateEventPublisher;
 import com.example.demo.domain.attempt.mvc.dto.AttemptMarkRequest;
 import com.example.demo.domain.attempt.mvc.dto.MarkResultListResponse;
 import com.example.demo.domain.attempt.mvc.dto.SimpleMarkResponse;
@@ -54,9 +53,8 @@ public class AttemptService {
     private final ProblemRepository problemRepository;
     private final AttemptRepository attemptRepository;
     private final AttemptAnalysisRequestPublisher attemptAnalysisRequestPublisher;
-    private final UserUpdateEventPublisher userUpdateEventPublisher;
-    private final KafkaProducer<String, UserIdListAvro> kafkaProducer;
-    private final KafkaProducer<String, UserUpdateAttempt> userUpdateEventKafkaProducer;
+    private final KafkaProducer<String, UserIdListAvro> userIdListProducer;
+    private final KafkaProducer<String, UserUpdateAttempt> userAttemptUpdateProducer;
     private final ConcurrentMap<String, CompletableFuture<List<String>>> nicknameFutures = new ConcurrentHashMap<>();
 
     /**
@@ -94,19 +92,14 @@ public class AttemptService {
             }
         }
 
-        // 유저 정보 업데이트 이벤트 생성 및 퍼블리싱
-//        math.ai.my.kafka.infra.avrobuild.UserUpdateEvent userUpdateEvent = math.ai.my.kafka.infra.avrobuild.UserUpdateEvent.newBuilder()
-//                .setUserId(attempt.getUserId())
-//                .setProblemId(savedProblemAttempt.getProblem().getId())
-//                .setStatus(savedProblemAttempt.getStatus().toString())
-//                .build();
         math.ai.my.kafka.infra.avrobuild.UserUpdateAttempt userUpdateEvent = UserUpdateAttempt.newBuilder()
                 .setUserId(attempt.getUserId())
                 .setProblemId(savedProblemAttempt.getProblem().getId())
                 .setStatus(savedProblemAttempt.getStatus().toString())
                 .build();
 
-        userUpdateEventKafkaProducer.send("user-update-attempt-topic",null,userUpdateEvent);
+        // 제출 수 증가로 변경
+        userAttemptUpdateProducer.send("user-update-attempt-topic", null, userUpdateEvent);
 
         return SimpleMarkResponse.builder()
                 .attemptId(savedProblemAttempt.getId())
@@ -122,8 +115,16 @@ public class AttemptService {
         reviewRepository.save(review);
         // attempt 상태 수정
         ProblemAttempt attempt = attemptRepository.findById(dto.getAttemptId())
-                .orElseThrow(()-> new AttemptException("존재하지 않는 시도입니다."));
+                .orElseThrow(() -> new AttemptException("존재하지 않는 시도입니다."));
         attempt.updateState(Status.SUCCESS);
+
+        UserUpdateAttempt userUpdateAttempt = UserUpdateAttempt.newBuilder()
+                .setUserId(attempt.getUserId())
+                .setProblemId(attempt.getProblem().getId())
+                .setStatus(attempt.getStatus().toString())
+                .build();
+
+        userAttemptUpdateProducer.send("user-update-attempt-success-topic", null, userUpdateAttempt);
     }
 
     private void analysisRequest(AttemptMarkRequest attempt, Long attemptId, String problemImgUrl, OfficialSolution officialSolution) {
@@ -131,7 +132,7 @@ public class AttemptService {
         // 문제 사진 입력
         contents.add(new ContentDto(MessageType.IMAGE_URL, problemImgUrl));
         // 정답 정보 입력
-        if(!(officialSolution.getTextSolution() == null || officialSolution.getTextSolution().isBlank())){
+        if (!(officialSolution.getTextSolution() == null || officialSolution.getTextSolution().isBlank())) {
             contents.add(new ContentDto(MessageType.TEXT, officialSolution.getTextSolution()));
         }
         officialSolution.getSolutionContents()
@@ -203,7 +204,7 @@ public class AttemptService {
         userIdListAvro.setRequestId(requestId); // 필드 설정
 
         log.info("Sending UserIdListAvro with requestId: {} and userIds: {}", requestId, userIdList);
-        kafkaProducer.send("user-id-list-topic", null, userIdListAvro);
+        userIdListProducer.send("user-id-list-topic", null, userIdListAvro);
 
         log.info("Waiting for nickname response for requestId: {}", requestId);
         return future.get(); // 닉네임 응답을 기다림
@@ -232,7 +233,7 @@ public class AttemptService {
                 .setStatus(Status.SUCCESS.getStatus())
                 .build();
 
-        userUpdateEventKafkaProducer.send("user-update-attempt-topic",null,userUpdateEvent);
+        userAttemptUpdateProducer.send("user-update-attempt-topic", null, userUpdateEvent);
     }
 
     public Page<MarkResultListResponse> getMarkResultListByProblemIdAndUserId(Long problemId, Long userId, Pageable pageable) throws ExecutionException, InterruptedException {
